@@ -29,38 +29,38 @@ function App() {
           <List>
             <ListItemButton sx={{margin: 0, padding: 0}}>
               <ListItem>
-                <ListItemIcon>
-                  <ListItemAvatar>
-                    <Avatar sx={{ backgroundColor: 'rgba(34, 139, 230, .1)', borderRadius: 2}}>
+                <ListItemIcon sx={{minWidth: 0}}>
+                  <ListItemAvatar sx={{minWidth: 0}}>
+                    <Avatar sx={{ backgroundColor: 'rgba(34, 139, 230, .1)', borderRadius: 2, width: 32, height: 32}}>
                       <HomeOutlinedIcon fontSize='small' sx={{color: 'rgba(34, 139, 230, 1)'}}/>
                     </Avatar>
                   </ListItemAvatar>
                 </ListItemIcon>
-                <ListItemText primary="View Records"/>
+                <ListItemText primary="View Records" sx={{marginLeft: 2}}/>
               </ListItem>
             </ListItemButton>
             <ListItemButton sx={{margin: 0, padding: 0}}>
               <ListItem>
-                <ListItemIcon>
-                  <ListItemAvatar>
-                    <Avatar sx={{backgroundColor: 'rgba(64, 192, 87, .1)', borderRadius: 2}}>
+                <ListItemIcon sx={{minWidth: 0}}>
+                  <ListItemAvatar sx={{minWidth: 0}}>
+                    <Avatar sx={{backgroundColor: 'rgba(64, 192, 87, .1)', borderRadius: 2, width: 32, height: 32}}>
                       <AddCircleOutlineRoundedIcon fontSize='small' sx={{color: 'rgba(64, 192, 87, 1)'}}/>
                     </Avatar>
                   </ListItemAvatar>
                 </ListItemIcon>
-                <ListItemText primary="Add New Records" />
+                <ListItemText primary="Add New Records"  sx={{marginLeft: 2}}/>
               </ListItem>
             </ListItemButton>
             <ListItemButton sx={{margin: 0, padding: 0}}>
               <ListItem>
-                <ListItemIcon>
-                  <ListItemAvatar>
-                    <Avatar sx={{backgroundColor: 'rgba(121, 80, 242, .1)', borderRadius: 2}}>
+                <ListItemIcon sx={{minWidth: 0}}>
+                  <ListItemAvatar sx={{minWidth: 0}}>
+                    <Avatar sx={{backgroundColor: 'rgba(121, 80, 242, .1)', borderRadius: 2, width: 32, height: 32}}>
                       <SettingsOutlinedIcon fontSize='small' sx={{color: 'rgba(121, 80, 242, 1)'}}/>
                     </Avatar>
                   </ListItemAvatar>
                 </ListItemIcon>
-                <ListItemText primary="Settings" />
+                <ListItemText primary="Settings" sx={{marginLeft: 2}}/>
               </ListItem>
             </ListItemButton>
           </List>
