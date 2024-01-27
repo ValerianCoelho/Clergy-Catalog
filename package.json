@@ -10,13 +10,18 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/icons-material": "^5.15.5",
+    "@mui/material": "^5.15.5",
+    "@tauri-apps/api": "^1.5.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@tauri-apps/api": "^1.5.2"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1.5.8",
     "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.0.0",
-    "@tauri-apps/cli": "^1.5.8"
+    "vite": "^5.0.0"
   }
 }
