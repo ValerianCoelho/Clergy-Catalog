@@ -1,13 +1,22 @@
-import { Box, Typography } from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import { Typography } from "@mui/material";
 import Panel from "./layout/Panel"
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#101010',
+    },
+  },
+});
 
 function App() {
   return (
-    <Box sx={{display: 'flex'}}>
+    <ThemeProvider theme={theme}>
       <Panel/>
       <Typography>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab, voluptatem delectus? Fugiat labore, placeat, culpa molestiae harum ab est a, beatae asperiores velit nemo amet iusto ea aperiam et. Sed!</Typography>
-    </Box>
-    
+    </ThemeProvider>
   );
 }
 
