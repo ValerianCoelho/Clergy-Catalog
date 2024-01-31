@@ -15,45 +15,46 @@ import { changeTab } from '../store/index'
 import { connect } from "react-redux";
 
 function Panel() {
+  const panelData = [
+    {
+      primaryText: 'View Records',
+      color: 'rgba(34, 139, 230, 1)',
+      backgroundColor: 'rgba(34, 139, 230, .1)',
+      icon: <HomeOutlinedIcon/>
+    },
+    {
+      primaryText: 'Add New Records',
+      color: 'rgba(64, 192, 87, 1)',
+      backgroundColor: 'rgba(64, 192, 87, .1)',
+      icon: <AddCircleOutlineRoundedIcon/>
+    },
+    {
+      primaryText: 'Settings',
+      color: 'rgba(121, 80, 242, 1)',
+      backgroundColor: 'rgba(121, 80, 242, .1)',
+      icon: <SettingsOutlinedIcon/>
+    }
+  ]
   return (
     <Drawer variant='permanent'>
       <List>
-        <ListItemButton sx={{margin: 0, padding: 0}} onClick={()=>console.log("Hello")}>
-          <ListItem>
-            <ListItemIcon sx={{minWidth: 0}}>
-              <ListItemAvatar sx={{minWidth: 0}}>
-                <Avatar sx={{ backgroundColor: 'rgba(34, 139, 230, .1)', borderRadius: 2, width: 32, height: 32}}>
-                  <HomeOutlinedIcon fontSize='small' sx={{color: 'rgba(34, 139, 230, 1)'}}/>
-                </Avatar>
-              </ListItemAvatar>
-            </ListItemIcon>
-            <ListItemText primary="View Records" sx={{marginLeft: 2}}/>
-          </ListItem>
-        </ListItemButton>
-        <ListItemButton sx={{margin: 0, padding: 0}}>
-          <ListItem>
-            <ListItemIcon sx={{minWidth: 0}}>
-              <ListItemAvatar sx={{minWidth: 0}}>
-                <Avatar sx={{backgroundColor: 'rgba(64, 192, 87, .1)', borderRadius: 2, width: 32, height: 32}}>
-                  <AddCircleOutlineRoundedIcon fontSize='small' sx={{color: 'rgba(64, 192, 87, 1)'}}/>
-                </Avatar>
-              </ListItemAvatar>
-            </ListItemIcon>
-            <ListItemText primary="Add New Records"  sx={{marginLeft: 2}}/>
-          </ListItem>
-        </ListItemButton>
-        <ListItemButton sx={{margin: 0, padding: 0}}>
-          <ListItem>
-            <ListItemIcon sx={{minWidth: 0}}>
-              <ListItemAvatar sx={{minWidth: 0}}>
-                <Avatar sx={{backgroundColor: 'rgba(121, 80, 242, .1)', borderRadius: 2, width: 32, height: 32}}>
-                  <SettingsOutlinedIcon fontSize='small' sx={{color: 'rgba(121, 80, 242, 1)'}}/>
-                </Avatar>
-              </ListItemAvatar>
-            </ListItemIcon>
-            <ListItemText primary="Settings" sx={{marginLeft: 2}}/>
-          </ListItem>
-        </ListItemButton>
+        {panelData.map(({primaryText, color, backgroundColor, icon})=>{
+          return (
+            <ListItemButton sx={{margin: 0, padding: 0}} onClick={()=>console.log("Hello")}>
+              <ListItem>
+                <ListItemIcon sx={{minWidth: 0}}>
+                  <ListItemAvatar sx={{minWidth: 0}}>
+                    <Avatar sx={{ backgroundColor: {backgroundColor}, borderRadius: 2, width: 32, height: 32}}>
+                      {/* <icon fontSize='small' sx={{color: {color}}}/> add these styles to the icon*/}
+                      {icon}
+                    </Avatar>
+                  </ListItemAvatar>
+                </ListItemIcon>
+                <ListItemText primary={primaryText} sx={{marginLeft: 2}}/>
+              </ListItem>
+            </ListItemButton>
+          )
+        })}
       </List>
     </Drawer>
   )
