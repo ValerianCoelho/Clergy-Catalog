@@ -13,34 +13,41 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 import { changeTab } from '../store/index'
 import { connect } from "react-redux";
+import { useEffect } from 'react';
 
-function Panel() {
+function Panel(props) {
   const panelData = [
     {
+      tab: 'view',
       primaryText: 'View Records',
       color: 'rgba(34, 139, 230, 1)',
       backgroundColor: 'rgba(34, 139, 230, .1)',
-      icon: <HomeOutlinedIcon/>
+      icon: <HomeOutlinedIcon/>,
     },
     {
+      tab: 'add',
       primaryText: 'Add New Records',
       color: 'rgba(64, 192, 87, 1)',
       backgroundColor: 'rgba(64, 192, 87, .1)',
-      icon: <AddCircleOutlineRoundedIcon/>
+      icon: <AddCircleOutlineRoundedIcon/>,
     },
     {
+      tab: 'settings',
       primaryText: 'Settings',
       color: 'rgba(121, 80, 242, 1)',
       backgroundColor: 'rgba(121, 80, 242, .1)',
-      icon: <SettingsOutlinedIcon/>
+      icon: <SettingsOutlinedIcon/>,
     }
   ]
+
   return (
     <Drawer variant='permanent'>
       <List>
-        {panelData.map(({primaryText, color, backgroundColor, icon})=>{
+        {panelData.map(({primaryText, color, backgroundColor, icon, tab}, index)=>{
           return (
-            <ListItemButton sx={{margin: 0, padding: 0}} onClick={()=>console.log("Hello")}>
+            <ListItemButton key={index} sx={{margin: 0, padding: 0}} onClick={()=>{
+              props.changeTab(tab)
+            }}>
               <ListItem>
                 <ListItemIcon sx={{minWidth: 0}}>
                   <ListItemAvatar sx={{minWidth: 0}}>
@@ -60,6 +67,12 @@ function Panel() {
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    tab: state.tab.tab,
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     changeTab: (tab)=> {
@@ -69,5 +82,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(
+  mapStateToProps,
   mapDispatchToProps
 )(Panel)
