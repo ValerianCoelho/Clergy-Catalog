@@ -1,8 +1,10 @@
-import { TextField, Grid, Typography } from "@mui/material";
+import { TextField, Grid, Select, MenuItem } from "@mui/material";
+import Heading from "../../components/Heading/Heading";
 
 function Add() {
     return (
       <>
+        <Heading title={'Create New Record'}/>
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
             <TextField id="first-name" label="First Name" variant="outlined" type="text" fullWidth={true}/>
@@ -36,6 +38,31 @@ function Add() {
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
             <TextField id="address" label="Address" variant="outlined" type="text" fullWidth={true} multiline maxRows={3}/>
+          </Grid>
+        </Grid>
+        <Heading title={'Donation 1'}/>
+        <Grid container spacing={4}>
+          <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <TextField id="purpose" label="Purpose" variant="outlined" type="text" fullWidth={true}/>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <TextField id="donation-amt" label="Donation Amount" variant="outlined" type="number" fullWidth={true}/>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <Select
+              label={'age'}
+              fullWidth={true}
+            >
+              <MenuItem>Ten</MenuItem>
+              <MenuItem>Twenty</MenuItem>
+              <MenuItem>Thirty</MenuItem>
+            </Select>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <TextField id="donation-date" variant="outlined" type="date" fullWidth={true}/>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <TextField id="reciept-no" label="Reciept Number" variant="outlined" type="number" fullWidth={true}/>
           </Grid>
         </Grid>
       </>
