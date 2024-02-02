@@ -13,14 +13,14 @@ export const details = [
                 date: '08-15-2022',
                 amount: '230000',
                 paymentMode: 'Cheque',
-                receiptNo: '92389',
+                recieptNo: '92389',
                 purpose: 'Prayers'
             },
             {
                 date: '12-01-2023',
                 amount: '230000',
                 paymentMode: 'Cheque',
-                receiptNo: '98732',
+                recieptNo: '98732',
                 purpose: 'Thanksgiving'
             }
         ]
@@ -39,7 +39,7 @@ export const details = [
                 date: '05-20-2022',
                 amount: '50000',
                 paymentMode: 'Online Transfer',
-                receiptNo: '56789',
+                recieptNo: '56789',
                 purpose: 'Education'
             }
         ]
@@ -58,7 +58,7 @@ export const details = [
                 date: '11-10-2022',
                 amount: '75000',
                 paymentMode: 'Credit Card',
-                receiptNo: '34567',
+                recieptNo: '34567',
                 purpose: 'Medical Assistance'
             }
         ]
@@ -77,7 +77,7 @@ export const details = [
                 date: '02-28-2023',
                 amount: '100000',
                 paymentMode: 'Cash',
-                receiptNo: '98765',
+                recieptNo: '98765',
                 purpose: 'Community Development'
             }
         ]
@@ -96,7 +96,7 @@ export const details = [
                 date: '07-15-2023',
                 amount: '45000',
                 paymentMode: 'Bank Transfer',
-                receiptNo: '87654',
+                recieptNo: '87654',
                 purpose: 'Orphanage Support'
             }
         ]

@@ -17,7 +17,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 
 import { details } from './constants'
-import { Box, Collapse, Divider, IconButton } from '@mui/material';
+import { Box, Collapse, Divider, IconButton, Typography } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -91,6 +91,35 @@ function DisplayDetails({person}) {
   )
 }
 
+function DisplayDonations({donations}) {
+  return (
+    <TableContainer component={Paper} sx={{marginBottom: 4}}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Date</TableCell>
+            <TableCell>Amount</TableCell>
+            <TableCell>Payment Mode</TableCell>
+            <TableCell>Reciept No</TableCell>
+            <TableCell>Purpose</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {donations.map((donation, index) => (
+            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              <TableCell>{donation.date}</TableCell>
+              <TableCell>{donation.amount}</TableCell>
+              <TableCell>{donation.paymentMode}</TableCell>
+              <TableCell>{donation.recieptNo}</TableCell>
+              <TableCell>{donation.purpose}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  )
+}
+
 export default function View() {
   const [open, setOpen] = useState(-1);
 
@@ -121,7 +150,10 @@ export default function View() {
               <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell colSpan={4} sx={{paddingTop: 0, paddingBottom: 0}}>
                   <Collapse in={open == index} timeout='auto' unmountOnExit>
+                    <Typography variant='h5' sx={{marginTop: 4, marginBottom: 1}}>Additional Details</Typography>
                     <DisplayDetails person={person}/>
+                    <Typography variant='h5' sx={{marginTop: 4, marginBottom: 1}}>Donation Details</Typography>
+                    <DisplayDonations donations={person.donations}/>
                   </Collapse>
                 </TableCell>
               </TableRow>
