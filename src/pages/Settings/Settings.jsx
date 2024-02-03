@@ -4,6 +4,7 @@ import Heading from "../../components/Heading/Heading"
 import { Stack, Typography } from "@mui/material";
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
+import DisplayDeleted from "./components/DisplayDeleted/DisplayDeleted";
 
 function Settings() {
     return (
@@ -31,6 +32,8 @@ function Settings() {
             actionTitle={'EXPORT AS CSV FILE'}
           />
         </Stack>
+        <Heading title={'Deleted Records'}/>
+        <DisplayDeleted/>
       </>
     )
   }
