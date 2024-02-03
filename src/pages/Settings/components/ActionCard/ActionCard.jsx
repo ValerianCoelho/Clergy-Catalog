@@ -2,8 +2,8 @@ import { Button, IconButton, Paper, Stack, Typography } from "@mui/material";
 
 function ActionCard(props) {
   return (
-    <Paper variant="outlined" sx={{display: 'inline-block', padding: 2}}>
-        <Stack direction='row' alignItems='center'>
+    <Paper variant="outlined" sx={{display: 'inline-block', padding: 2, minWidth: 280}}>
+        <Stack direction='row' alignItems='center' ml={-1}>
           <IconButton>
             {props.icon}
           </IconButton>
