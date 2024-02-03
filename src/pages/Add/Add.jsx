@@ -1,11 +1,17 @@
-import { TextField, Grid, Select, MenuItem } from "@mui/material";
+import { TextField, Grid, Select, MenuItem, InputLabel, Box } from "@mui/material";
 import Heading from "../../components/Heading/Heading";
+import { useState } from 'react';
 
 function Add() {
+  const [country, setCountry] = useState('');
+
+  const handleChange = (event) => {
+    setCountry(event.target.value);
+  };
     return (
       <>
         <Heading title={'Create New Record'}/>
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
             <TextField id="first-name" label="First Name" variant="outlined" type="text" fullWidth={true}/>
           </Grid>
@@ -41,7 +47,7 @@ function Add() {
           </Grid>
         </Grid>
         <Heading title={'Donation 1'}/>
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
             <TextField id="purpose" label="Purpose" variant="outlined" type="text" fullWidth={true}/>
           </Grid>
@@ -49,14 +55,15 @@ function Add() {
             <TextField id="donation-amt" label="Donation Amount" variant="outlined" type="number" fullWidth={true}/>
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-            <Select
-              label={'age'}
-              fullWidth={true}
-            >
-              <MenuItem>Ten</MenuItem>
-              <MenuItem>Twenty</MenuItem>
-              <MenuItem>Thirty</MenuItem>
-            </Select>
+            <Box>
+              <TextField label='Select' fullWidth={true} select value={country}
+                onChange={handleChange}
+              >
+                <MenuItem value='India'>India</MenuItem>
+                <MenuItem value='China'>China</MenuItem>
+                <MenuItem value='America'>America</MenuItem>
+              </TextField>
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
             <TextField id="donation-date" variant="outlined" type="date" fullWidth={true}/>
