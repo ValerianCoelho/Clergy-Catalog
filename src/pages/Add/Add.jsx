@@ -1,4 +1,5 @@
 import { TextField, Grid, Select, MenuItem, InputLabel, Box } from "@mui/material";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Heading from "../../components/Heading/Heading";
 import { useState } from 'react';
 
@@ -66,7 +67,7 @@ function Add() {
             </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-            <TextField id="donation-date" variant="outlined" type="date" fullWidth={true}/>
+            <DatePicker label="Basic date picker" sx={{width: '100%'}}/>
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
             <TextField id="reciept-no" label="Reciept Number" variant="outlined" type="number" fullWidth={true}/>

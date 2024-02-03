@@ -6,6 +6,10 @@ const createColor = (mainColor) => augmentColor({ color: { main: mainColor } });
 import Panel from "./layout/Panel"
 import Content from "./pages/Content"
 
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
+
 
 const theme = createTheme({
   palette: {
@@ -16,8 +20,10 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Panel/>
-      <Content/>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Panel/>
+        <Content/>
+      </LocalizationProvider>
     </ThemeProvider>
   );
 }
