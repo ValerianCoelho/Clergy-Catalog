@@ -1,5 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+const { palette } = createTheme();
+const { augmentColor } = palette;
+const createColor = (mainColor) => augmentColor({ color: { main: mainColor } });
 
 import Panel from "./layout/Panel"
 import Content from "./pages/Content"
@@ -7,9 +9,7 @@ import Content from "./pages/Content"
 
 const theme = createTheme({
   palette: {
-    primary: {
-      main: '#101010',
-    },
+    grey: createColor('#E9ECEF'),
   },
 });
 
