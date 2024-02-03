@@ -7,7 +7,7 @@ import Settings from "./Settings/Settings";
 
 function Content(props) {
   return (
-    <Box sx={{marginLeft: 28}}>
+    <Box sx={{marginLeft: 30, marginRight: 5, marginTop: 4}}>
       {props.tab === 'view' && <View/>}
       {props.tab === 'add' && <Add/>}
       {props.tab === 'settings' && <Settings/>}

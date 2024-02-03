@@ -10,7 +10,7 @@ function ActionCard(props) {
           <Typography fontWeight='bold'>{props.title}</Typography>
         </Stack>
         <Typography>{props.description}</Typography>
-        <Button variant="contained" color="grey" size="small" sx={{marginTop: 2}}>{props.actionTitle}</Button>
+        <Button variant="contained" color="grey" size="small" sx={{marginTop: 2}} disableElevation>{props.actionTitle}</Button>
       </Paper>
   )
 }
