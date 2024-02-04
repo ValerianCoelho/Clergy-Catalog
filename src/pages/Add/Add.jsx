@@ -2,7 +2,7 @@ import { TextField, Grid, Select, MenuItem, InputLabel, Box, Button } from "@mui
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Heading from "../../components/Heading/Heading";
 import { useState } from 'react';
-import Database from "tauri-plugin-sql-api";
+import db from "../../backend/database";
 
 function Add() {
   const [country, setCountry] = useState('');
@@ -12,7 +12,6 @@ function Add() {
   };
 
   async function handleClick() {
-    const db = await Database.load("sqlite:test.db");
     const result = await db.execute(
       "INSERT INTO users (name, age) VALUES ('Valerian Coelho', 20);",
     );
