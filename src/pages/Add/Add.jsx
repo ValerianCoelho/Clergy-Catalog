@@ -81,31 +81,35 @@ function Add() {
         purpose: "",
         donationAmount: "",
         paymentMode: "",
-        date: null,
+        date: "",
         receiptNo: "",
       },
     ],
   });
-  const [country, setCountry] = useState("");
 
-  // const handleChange = (event) => {
-  //   setCountry(event.target.value);
-  // };
-
-  const handleChange = (attribute, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      ...(attribute.length === 1
-        ? { [attribute]: value }
-        : { donations: { ...prevData.donations, [attribute[1]]: value } }),
-    }));
+  const handleChange = (attribute, value, donation, index) => {
+    if (!donation) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [attribute]: value,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        donations: {
+          ...prevData.donations,
+          [index]: {
+            ...prevData.donations[index],
+            [attribute]: value,
+          },
+        },
+      }));
+    }
   };
-  
-  
 
-  useEffect(()=>{
-    console.log(formData)
-  }, [formData])
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   return (
     <>
@@ -113,23 +117,26 @@ function Add() {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
           <TextField
-            id="first-name"
+            id="fname"
             label="First Name"
             variant="outlined"
             type="text"
             fullWidth={true}
             onChange={(e) => {
-              handleChange(['fname'], e.target.value)
+              handleChange("fname", e.target.value);
             }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
           <TextField
-            id="last-name"
+            id="lname"
             label="Last Name"
             variant="outlined"
             type="text"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("lname", e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -139,6 +146,9 @@ function Add() {
             variant="outlined"
             type="text"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("email", e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -148,6 +158,9 @@ function Add() {
             variant="outlined"
             type="number"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("contact1", e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -157,6 +170,9 @@ function Add() {
             variant="outlined"
             type="number"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("contact2", e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -166,6 +182,9 @@ function Add() {
             variant="outlined"
             type="number"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("contact3", e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -175,6 +194,9 @@ function Add() {
             variant="outlined"
             type="number"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("pan", e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -184,6 +206,9 @@ function Add() {
             variant="outlined"
             type="number"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("sbn", e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -193,6 +218,9 @@ function Add() {
             variant="outlined"
             type="text"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("beneficiary1", e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -202,6 +230,9 @@ function Add() {
             variant="outlined"
             type="text"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("beneficiary2", e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -213,6 +244,9 @@ function Add() {
             fullWidth={true}
             multiline
             maxRows={3}
+            onChange={(e) => {
+              handleChange("address", e.target.value);
+            }}
           />
         </Grid>
       </Grid>
@@ -226,17 +260,20 @@ function Add() {
             type="text"
             fullWidth={true}
             onChange={(e) => {
-              handleChange(['donations', 'purpose'], e.target.value)
+              handleChange("purpose", e.target.value, true, 0);
             }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
           <TextField
-            id="donation-amt"
+            id="amount"
             label="Donation Amount"
             variant="outlined"
             type="number"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("amount", e.target.value, true, 0);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -245,8 +282,10 @@ function Add() {
               label="Select"
               fullWidth={true}
               select
-              value={country}
-              // onChange={handleChange}
+              value={formData.donations[0].paymentMode}
+              onChange={(e) => {
+                handleChange("paymentMode", e.target.value, true, 0);
+              }}
             >
               <MenuItem value="India">India</MenuItem>
               <MenuItem value="China">China</MenuItem>
@@ -255,15 +294,26 @@ function Add() {
           </Box>
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-          <DatePicker label="Basic date picker" sx={{ width: "100%" }} />
+          <DatePicker
+            label="Basic date picker"
+            sx={{ width: "100%" }}
+            onChange={(e) => {
+              const date = new Date(e['$d']);
+              const value = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+              handleChange("date", value, true, 0);
+            }}
+          />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
           <TextField
-            id="reciept-no"
+            id="recieptNo"
             label="Reciept Number"
             variant="outlined"
             type="number"
             fullWidth={true}
+            onChange={(e) => {
+              handleChange("receiptNo", e.target.value, true, 0);
+            }}
           />
         </Grid>
       </Grid>
