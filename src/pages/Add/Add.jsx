@@ -6,7 +6,6 @@ import Heading from "../../components/Heading/Heading";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -22,7 +21,7 @@ function Title(props) {
     <>
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
         <Typography variant="h5">
-          Donation {parseInt(props.index) + 1}
+          Donation {props.index + 1}
         </Typography>
         {props.isLast && (
           <ListItemAvatar>
@@ -41,21 +40,23 @@ function Title(props) {
                   />
                 </IconButton>
               </Avatar>
-              <Avatar
-                sx={{
-                  width: 32,
-                  height: 32,
-                  backgroundColor: "rgba(192, 64, 64, .1)",
-                }}
-              >
-                <IconButton onClick={props.handleRemoveDonation}>
-                  <RemoveIcon
-                    fontSize="small"
-                    color="error"
-                    sx={{ color: "rgb(192, 64, 64)" }}
-                  />
-                </IconButton>
-              </Avatar>
+              {!props.isFirst && (
+                <Avatar
+                  sx={{
+                    width: 32,
+                    height: 32,
+                    backgroundColor: "rgba(192, 64, 64, .1)",
+                  }}
+                >
+                  <IconButton onClick={props.handleRemoveDonation}>
+                    <RemoveIcon
+                      fontSize="small"
+                      color="error"
+                      sx={{ color: "rgb(192, 64, 64)" }}
+                    />
+                  </IconButton>
+                </Avatar>
+              )}
             </Stack>
           </ListItemAvatar>
         )}
@@ -89,7 +90,6 @@ function Add() {
   });
 
   const handleAddDonation = () => {
-    console.log("Add Donation");
     setFormData((prevData) => ({
       ...prevData,
       donations: {
@@ -106,7 +106,16 @@ function Add() {
   };
 
   const handleRemoveDonation = () => {
-    console.log("Remove Donation");
+    setFormData((prevData) => {
+      const {
+        [Object.keys(prevData.donations).pop()]: removedDonation,
+        ...newDonations
+      } = prevData.donations;
+      return {
+        ...prevData,
+        donations: newDonations,
+      };
+    });
   };
 
   useEffect(() => {
@@ -153,7 +162,7 @@ function Add() {
         ))}
       </Grid>
 
-      {Object.keys(formData.donations).map((index) => (
+      {Object.keys(formData.donations).map((_, index) => (
         <React.Fragment key={index}>
           <Heading
             title={
@@ -161,11 +170,12 @@ function Add() {
                 handleAddDonation={handleAddDonation}
                 handleRemoveDonation={handleRemoveDonation}
                 index={index}
-                isLast={index == Object.keys(formData.donations).length-1}
+                isFirst={index == 0}
+                isLast={index == Object.keys(formData.donations).length - 1}
               />
             }
           />
-          <Grid container spacing={2} key={index}>
+          <Grid container spacing={2}>
             {inputStructure.donations.map(({ id, label, type }) => (
               <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={id}>
                 {type === "select" && (
@@ -173,9 +183,9 @@ function Add() {
                     select
                     label={label}
                     fullWidth={true}
-                    value={formData.donations[0].paymentMode}
+                    value={formData.donations[index].paymentMode}
                     onChange={(e) => {
-                      handleChange(id, e.target.value, true, 0);
+                      handleChange(id, e.target.value, true, index);
                     }}
                   >
                     <MenuItem value="cheque">Cheque</MenuItem>
@@ -192,7 +202,7 @@ function Add() {
                       const value = `${date.getDate()}/${
                         date.getMonth() + 1
                       }/${date.getFullYear()}`;
-                      handleChange(id, value, true, 0);
+                      handleChange(id, value, true, index);
                     }}
                   />
                 )}
@@ -204,7 +214,7 @@ function Add() {
                     type={type}
                     fullWidth={true}
                     onChange={(e) => {
-                      handleChange(id, e.target.value, true, 0);
+                      handleChange(id, e.target.value, true, index);
                     }}
                   />
                 )}
