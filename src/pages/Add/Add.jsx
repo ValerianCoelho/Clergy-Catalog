@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { inputStructure } from "./constants";
 import Heading from "../../components/Heading/Heading";
 // import db from "../../backend/database";
@@ -17,44 +17,48 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-function Title() {
+function Title(props) {
   return (
     <>
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
-        <Typography variant="h5">Donations</Typography>
-        <ListItemAvatar>
-          <Stack direction={"row"} spacing={1} alignItems={"center"}>
-            <Avatar
-              sx={{
-                width: 32,
-                height: 32,
-                backgroundColor: "rgba(64, 192, 87, .1)",
-              }}
-            >
-              <IconButton>
-                <AddIcon
-                  fontSize="small"
-                  sx={{ color: "rgba(64, 192, 87, 1)" }}
-                />
-              </IconButton>
-            </Avatar>
-            <Avatar
-              sx={{
-                width: 32,
-                height: 32,
-                backgroundColor: "rgba(192, 64, 64, .1)",
-              }}
-            >
-              <IconButton>
-                <RemoveIcon
-                  fontSize="small"
-                  color="error"
-                  sx={{ color: "rgb(192, 64, 64)" }}
-                />
-              </IconButton>
-            </Avatar>
-          </Stack>
-        </ListItemAvatar>
+        <Typography variant="h5">
+          Donation {parseInt(props.index) + 1}
+        </Typography>
+        {props.isLast && (
+          <ListItemAvatar>
+            <Stack direction={"row"} spacing={1} alignItems={"center"}>
+              <Avatar
+                sx={{
+                  width: 32,
+                  height: 32,
+                  backgroundColor: "rgba(64, 192, 87, .1)",
+                }}
+              >
+                <IconButton onClick={props.handleAddDonation}>
+                  <AddIcon
+                    fontSize="small"
+                    sx={{ color: "rgba(64, 192, 87, 1)" }}
+                  />
+                </IconButton>
+              </Avatar>
+              <Avatar
+                sx={{
+                  width: 32,
+                  height: 32,
+                  backgroundColor: "rgba(192, 64, 64, .1)",
+                }}
+              >
+                <IconButton onClick={props.handleRemoveDonation}>
+                  <RemoveIcon
+                    fontSize="small"
+                    color="error"
+                    sx={{ color: "rgb(192, 64, 64)" }}
+                  />
+                </IconButton>
+              </Avatar>
+            </Stack>
+          </ListItemAvatar>
+        )}
       </Stack>
     </>
   );
@@ -73,16 +77,41 @@ function Add() {
     beneficiary1: "",
     beneficiary2: "",
     address: "",
-    donations: [
-      {
+    donations: {
+      0: {
         purpose: "",
         amount: "",
         paymentMode: "",
         date: "",
         receipt: "",
       },
-    ],
+    },
   });
+
+  const handleAddDonation = () => {
+    console.log("Add Donation");
+    setFormData((prevData) => ({
+      ...prevData,
+      donations: {
+        ...prevData.donations,
+        [Object.keys(prevData.donations).length]: {
+          purpose: "",
+          amount: "",
+          paymentMode: "",
+          date: "",
+          receipt: "",
+        },
+      },
+    }));
+  };
+
+  const handleRemoveDonation = () => {
+    console.log("Remove Donation");
+  };
+
+  useEffect(() => {
+    console.log(formData.donations);
+  }, [formData]);
 
   const handleChange = (attribute, value, donation, index) => {
     if (!donation) {
@@ -124,53 +153,66 @@ function Add() {
         ))}
       </Grid>
 
-      <Heading title={<Title />} />
-      <Grid container spacing={2}>
-        {inputStructure.donations.map(({ id, label, type }) => (
-          <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={id}>
-            {type === "select" && (
-              <TextField
-                select
-                label={label}
-                fullWidth={true}
-                value={formData.donations[0].paymentMode}
-                onChange={(e) => {
-                  handleChange(id, e.target.value, true, 0);
-                }}
-              >
-                <MenuItem value="cheque">Cheque</MenuItem>
-                <MenuItem value="card">Card</MenuItem>
-                <MenuItem value="cash">Cash</MenuItem>
-              </TextField>
-            )}
-            {type === "date" && (
-              <DatePicker
-                label={label}
-                sx={{ width: "100%" }}
-                onChange={(e) => {
-                  const date = new Date(e["$d"]);
-                  const value = `${date.getDate()}/${
-                    date.getMonth() + 1
-                  }/${date.getFullYear()}`;
-                  handleChange(id, value, true, 0);
-                }}
+      {Object.keys(formData.donations).map((index) => (
+        <React.Fragment key={index}>
+          <Heading
+            title={
+              <Title
+                handleAddDonation={handleAddDonation}
+                handleRemoveDonation={handleRemoveDonation}
+                index={index}
+                isLast={index == Object.keys(formData.donations).length-1}
               />
-            )}
-            {(type === "text" || type === "number") && (
-              <TextField
-                id={id}
-                label={label}
-                variant="outlined"
-                type={type}
-                fullWidth={true}
-                onChange={(e) => {
-                  handleChange(id, e.target.value, true, 0);
-                }}
-              />
-            )}
+            }
+          />
+          <Grid container spacing={2} key={index}>
+            {inputStructure.donations.map(({ id, label, type }) => (
+              <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={id}>
+                {type === "select" && (
+                  <TextField
+                    select
+                    label={label}
+                    fullWidth={true}
+                    value={formData.donations[0].paymentMode}
+                    onChange={(e) => {
+                      handleChange(id, e.target.value, true, 0);
+                    }}
+                  >
+                    <MenuItem value="cheque">Cheque</MenuItem>
+                    <MenuItem value="card">Card</MenuItem>
+                    <MenuItem value="cash">Cash</MenuItem>
+                  </TextField>
+                )}
+                {type === "date" && (
+                  <DatePicker
+                    label={label}
+                    sx={{ width: "100%" }}
+                    onChange={(e) => {
+                      const date = new Date(e["$d"]);
+                      const value = `${date.getDate()}/${
+                        date.getMonth() + 1
+                      }/${date.getFullYear()}`;
+                      handleChange(id, value, true, 0);
+                    }}
+                  />
+                )}
+                {(type === "text" || type === "number") && (
+                  <TextField
+                    id={id}
+                    label={label}
+                    variant="outlined"
+                    type={type}
+                    fullWidth={true}
+                    onChange={(e) => {
+                      handleChange(id, e.target.value, true, 0);
+                    }}
+                  />
+                )}
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
+        </React.Fragment>
+      ))}
 
       <Button variant="contained" fullWidth={true} sx={{ my: 2 }}>
         Add Record
