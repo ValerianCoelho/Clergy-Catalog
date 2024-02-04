@@ -1,7 +1,8 @@
-import { TextField, Grid, Select, MenuItem, InputLabel, Box } from "@mui/material";
+import { TextField, Grid, Select, MenuItem, InputLabel, Box, Button } from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Heading from "../../components/Heading/Heading";
 import { useState } from 'react';
+import Database from "tauri-plugin-sql-api";
 
 function Add() {
   const [country, setCountry] = useState('');
@@ -9,6 +10,15 @@ function Add() {
   const handleChange = (event) => {
     setCountry(event.target.value);
   };
+
+  async function handleClick() {
+    const db = await Database.load("sqlite:test.db");
+    const result = await db.execute(
+      "INSERT INTO users (name, age) VALUES ('Valerian Coelho', 20);",
+    );
+    console.log(result)
+  }
+
     return (
       <>
         <Heading title={'Create New Record'}/>
@@ -73,6 +83,7 @@ function Add() {
             <TextField id="reciept-no" label="Reciept Number" variant="outlined" type="number" fullWidth={true}/>
           </Grid>
         </Grid>
+        <Button variant="contained" onClick={handleClick}>Hello</Button>
       </>
     )
   }
