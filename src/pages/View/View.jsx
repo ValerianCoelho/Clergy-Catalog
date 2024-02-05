@@ -11,15 +11,41 @@ import { details } from './constants'
 import { Collapse, IconButton, Typography } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 
-import { useState } from 'react';
 import DisplayDonations from './components/DisplayDonations/DisplayDonations';
 import DisplayAdditionalDetails from './components/DisplayAdditionalDetails/DisplayAdditionalDetails';
+import { useState } from 'react';
+import db from '../../backend/database';
+
+async function fetchDetails() {
+  const people = await db.select("SELECT * FROM person;")
+  const donations  = await db.select("SELECT * FROM donation;")
+  
+  const details = []
+  for (const person of people) {
+    // combine both beneficiaries in UI
+    person.beneficiary = person.beneficiary1
+      + (person.beneficiary2 ? `, ${person.beneficiary2}` : '');
+
+    person.donations = [];
+    for (const donation of donations) {
+      if (donation.sbn != person.sbn) continue;
+      person.donations.push(donation);
+    }
+
+    details.push(person)
+  }
+
+  console.log(details)
+  return details
+}
 
 
 
 
 export default function View() {
   const [open, setOpen] = useState(-1);
+  
+  fetchDetails();
 
   return (
     <TableContainer component={Paper}>
