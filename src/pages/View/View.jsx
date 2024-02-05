@@ -7,6 +7,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+import { styled } from '@mui/material/styles';
+
 import { details } from './constants'
 import { Collapse, IconButton, Typography } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
@@ -40,6 +42,25 @@ async function fetchDetails() {
 }
 
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 
 export default function View() {
@@ -50,18 +71,18 @@ export default function View() {
   return (
     <TableContainer component={Paper}>
       <Table>
-        <TableHead>
+        <TableHead sx={{backgroundColor: "black"}}>
           <TableRow>
-            <TableCell>Expand</TableCell>
-            <TableCell>First Name</TableCell>
-            <TableCell>Last Name</TableCell>
-            <TableCell>SBN</TableCell>
+            <TableCell sx={{color: 'white', fontWeight: 'bold'}}>Expand</TableCell>
+            <TableCell sx={{color: 'white', fontWeight: 'bold'}}>First Name</TableCell>
+            <TableCell sx={{color: 'white', fontWeight: 'bold'}}>Last Name</TableCell>
+            <TableCell sx={{color: 'white', fontWeight: 'bold'}}>SBN</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {details.map((person, index) => (
             <React.Fragment key={index}>
-              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 }, backgroundColor: index % 2 === 1 ? '#f4f4f4' : 'white' }}>
                 <TableCell>
                   <IconButton onClick={()=>{setOpen(open === index ? -1 : index)}}>
                     { open == index ? <KeyboardArrowUp/> : <KeyboardArrowDown/> }
