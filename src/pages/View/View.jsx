@@ -24,6 +24,7 @@ import Typography from "@mui/material/Typography";
 
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
+import { Button } from "@mui/material";
 
 export default function View() {
   const [open, setOpen] = useState(-1);
@@ -99,13 +100,14 @@ export default function View() {
                   <TableCell>{person.lname}</TableCell>
                   <TableCell>{person.sbn}</TableCell>
                 </TableRow>
-                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 }, border: open === index ? '2px solid #4d4d4d52' : ''}}>
                   <TableCell colSpan={4} sx={{paddingTop: 0, paddingBottom: 0}}>
                     <Collapse in={open == index} timeout='auto' unmountOnExit>
-                      <Typography variant='h5' sx={{marginTop: 4, marginBottom: 1}}>Additional Details</Typography>
-                      <DisplayAdditionalDetails person={person}/>
-                      <Typography variant='h5' sx={{marginTop: 4, marginBottom: 1}}>Donation Details</Typography>
+                      <Typography variant='h5' sx={{marginTop: 3, marginBottom: 2}}>Donation Details</Typography>
                       <DisplayDonations donations={person.donations}/>
+                      <Typography variant='h5' sx={{marginTop: 4, marginBottom: 2}}>Additional Details</Typography>
+                      <DisplayAdditionalDetails person={person}/>
+                      <Button variant="contained" fullWidth={true} sx={{marginBottom: 2}} disableElevation>Edit Record</Button>
                     </Collapse>
                   </TableCell>
                 </TableRow>

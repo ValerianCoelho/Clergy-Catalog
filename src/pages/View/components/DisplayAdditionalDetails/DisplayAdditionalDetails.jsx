@@ -76,7 +76,7 @@ function DisplayAdditionalDetails({ person }) {
   
 
   return (
-    <Paper sx={{ marginY: 2 }}>
+    <Paper sx={{ mb: 2 }}>
       <Grid container>
         {additionalDetails.map(({ value, label, icon, backgroundColor }, index) => (
           <React.Fragment key={index}>

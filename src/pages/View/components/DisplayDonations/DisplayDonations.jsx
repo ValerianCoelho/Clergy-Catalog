@@ -12,9 +12,9 @@ function DisplayDonations({ donations }) {
     console.log(donations);
   }, []);
   return (
-    <TableContainer component={Paper} sx={{ marginBottom: 4 }}>
+    <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
       <Table>
-        <TableHead sx={{backgroundColor: "#303030"}}>
+        <TableHead sx={{backgroundColor: "#616161"}}>
           <TableRow>
             <TableCell sx={{color: 'white'}}>Date</TableCell>
             <TableCell sx={{color: 'white'}}>Amount</TableCell>
