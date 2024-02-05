@@ -6,7 +6,7 @@ export const details = [
         beneficiary: 'Fr. Peter',
         email: 'valerian27012004@gmail.com',
         pan: '279398',
-        contact: '9609838032',
+        contact: ['9609838032', '9609838032', '9609838032'],
         sbn: '298733',
         donations: [
             {
@@ -32,7 +32,7 @@ export const details = [
         beneficiary: 'Mrs. Smith',
         email: 'john.doe@example.com',
         pan: '456789',
-        contact: '1234567890',
+        contact: ['9609838032', '9609838032', '9609838032'],
         sbn: '987654',
         donations: [
             {
@@ -51,7 +51,7 @@ export const details = [
         beneficiary: 'Mr. Anderson',
         email: 'alice.johnson@example.com',
         pan: '789012',
-        contact: '9876543210',
+        contact: ['9609838032', '9609838032', '9609838032'],
         sbn: '345678',
         donations: [
             {
@@ -70,7 +70,7 @@ export const details = [
         beneficiary: 'Dr. Miller',
         email: 'michael.brown@example.com',
         pan: '123456',
-        contact: '8765432109',
+        contact: ['9609838032', '9609838032', '9609838032'],
         sbn: '567890',
         donations: [
             {
@@ -89,7 +89,7 @@ export const details = [
         beneficiary: 'Sister Mary',
         email: 'sophia.garcia@example.com',
         pan: '234567',
-        contact: '7654321098',
+        contact: ['9609838032', '9609838032', '9609838032'],
         sbn: '678901',
         donations: [
             {
