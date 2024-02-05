@@ -1,29 +1,36 @@
-import Paper from '@mui/material/Paper';
-import TableContainer from '@mui/material/TableContainer';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
+import Paper from "@mui/material/Paper";
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import { useEffect } from "react";
 
 function DisplayDonations({ donations }) {
+  useEffect(() => {
+    console.log(donations);
+  }, []);
   return (
     <TableContainer component={Paper} sx={{ marginBottom: 4 }}>
       <Table>
-        <TableHead>
+        <TableHead sx={{backgroundColor: "rgba(64, 192, 87, 1)"}}>
           <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Amount</TableCell>
-            <TableCell>Payment Mode</TableCell>
-            <TableCell>Reciept No</TableCell>
-            <TableCell>Purpose</TableCell>
+            <TableCell sx={{color: 'white'}}>Date</TableCell>
+            <TableCell sx={{color: 'white'}}>Amount</TableCell>
+            <TableCell sx={{color: 'white'}}>Payment Mode</TableCell>
+            <TableCell sx={{color: 'white'}}>Reciept No</TableCell>
+            <TableCell sx={{color: 'white'}}>Purpose</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {donations.map((donation, index) => (
             <TableRow
               key={index}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              sx={{
+                "&:last-child td, &:last-child th": { border: 0 },
+                backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
+              }}
             >
               <TableCell>{donation.date}</TableCell>
               <TableCell>{donation.amount}</TableCell>
