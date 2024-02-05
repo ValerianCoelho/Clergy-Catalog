@@ -14,7 +14,7 @@ function DisplayDonations({ donations }) {
   return (
     <TableContainer component={Paper} sx={{ marginBottom: 4 }}>
       <Table>
-        <TableHead sx={{backgroundColor: "rgba(64, 192, 87, 1)"}}>
+        <TableHead sx={{backgroundColor: "#303030"}}>
           <TableRow>
             <TableCell sx={{color: 'white'}}>Date</TableCell>
             <TableCell sx={{color: 'white'}}>Amount</TableCell>
