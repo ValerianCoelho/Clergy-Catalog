@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { details } from "./constants";
 import db from "../../backend/database";
+import { changeTab } from '../../store/index'
+import { connect } from "react-redux";
 
 import Heading from "../../components/Heading/Heading";
 import DisplayDonations from "./components/DisplayDonations/DisplayDonations";
@@ -26,7 +28,7 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
 import { Button } from "@mui/material";
 
-export default function View() {
+function View(props) {
   const [open, setOpen] = useState(-1);
   const [searchAttribute, setSearchAttribute] = useState('First Name');
 
@@ -34,7 +36,7 @@ export default function View() {
     fetchDetails();
   }, [])
 
-  async function fetchDetails() {
+  async function fetchDetails(props) {
     const people = await db.select("SELECT * FROM person;");
     const donations = await db.select("SELECT * FROM donation;");
   
@@ -107,7 +109,17 @@ export default function View() {
                       <DisplayDonations donations={person.donations}/>
                       <Typography variant='h5' sx={{marginTop: 4, marginBottom: 2}}>Additional Details</Typography>
                       <DisplayAdditionalDetails person={person}/>
-                      <Button variant="contained" fullWidth={true} sx={{marginBottom: 2}} disableElevation>Edit Record</Button>
+                      <Button 
+                        variant="contained" 
+                        fullWidth={true} 
+                        sx={{marginBottom: 2}} 
+                        disableElevation
+                        onClick={()=>{
+                          props.changeTab('edit')
+                        }}
+                      >
+                        Edit Record
+                      </Button>
                     </Collapse>
                   </TableCell>
                 </TableRow>
@@ -119,3 +131,22 @@ export default function View() {
     </>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    tab: state.tab.tab,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeTab: (tab)=> {
+      dispatch(changeTab(tab))
+    }
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(View);

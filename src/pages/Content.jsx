@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import Add from "./Add/Add";
 import View from "./View/View";
 import Settings from "./Settings/Settings";
+import Edit from "./Edit/Edit";
+
 
 function Content(props) {
   return (
@@ -11,6 +13,7 @@ function Content(props) {
       {props.tab === 'view' && <View/>}
       {props.tab === 'add' && <Add/>}
       {props.tab === 'settings' && <Settings/>}
+      {props.tab === 'edit' && <Edit/>}
     </Box>
   )
 }
