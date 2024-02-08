@@ -24,7 +24,7 @@ function DisplayDonations({ donations }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {donations.map((donation, index) => (
+          {donations && donations.map((donation, index) => (
             <TableRow
               key={index}
               sx={{

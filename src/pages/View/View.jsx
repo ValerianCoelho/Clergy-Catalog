@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { details } from "./constants";
+import { data } from "./constants";
 import db from "../../backend/database";
 import { changeTab } from '../../store/index'
 import { connect } from "react-redux";
@@ -31,36 +31,39 @@ import { Button } from "@mui/material";
 function View(props) {
   const [open, setOpen] = useState(-1);
   const [searchAttribute, setSearchAttribute] = useState('First Name');
+  const [data, setData] = useState([]);
 
   useEffect(()=>{
     fetchDetails();
   }, [])
 
-  async function fetchDetails(props) {
-    // const people = await db.select("SELECT * FROM person;");
-    // const donations = await db.select("SELECT * FROM donation;");
-    const donations = await db.select("SELECT * FROM person join donation on person.sbn = donation.sbn;");
-    console.log(donations)
-    // const details = {...people};
 
-    // console.log(people, donations)
-    // const details = [];
-    // for (const person of people) {
-    //   // combine both beneficiaries in UI
-    //   person.beneficiary =
-    //     person.beneficiary1 +
-    //     (person.beneficiary2 ? `, ${person.beneficiary2}` : "");
+  async function fetchDetails() {
+    try {
+      const people = await db.select("SELECT * FROM person");
   
-    //   person.donations = [];
-    //   for (const donation of donations) {
-    //     if (donation.sbn != person.sbn) continue;
-    //     person.donations.push(donation);
-    //   }
-    //   details.push(person);
-    // }
-    // console.log(details);
-    // return details;
+      // Create an array of promises for fetching donations
+      const donationPromises = people.map(person =>
+        db.select(`SELECT * FROM donation WHERE sbn=${person.sbn}`)
+      );
+  
+      // Wait for all donation promises to resolve
+      const donations = await Promise.all(donationPromises);
+      
+      // Combine person and donation data
+      const details = people.map((person, index) => ({
+        ...person,
+        donation: donations[index]
+      }));
+      console.log("Hello", details)
+  
+      setData(details);
+      console.log(details);
+    } catch (error) {
+      console.error("Error fetching details:", error);
+    }
   }
+  
 
   return (
     <>
@@ -94,7 +97,7 @@ function View(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {details.map((person, index) => (
+            {data.map((person, index) => (
               <React.Fragment key={index}>
                 <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 }, backgroundColor: index % 2 === 1 ? '#f4f4f4' : 'white' }}>
                   <TableCell>

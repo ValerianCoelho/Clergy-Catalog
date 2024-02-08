@@ -1,4 +1,4 @@
-export const details = [
+export const data = [
     {
         fname: 'Valerian',
         lname: 'Coelho',

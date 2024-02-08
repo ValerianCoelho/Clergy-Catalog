@@ -1,5 +1,5 @@
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { details } from '../../../View/constants'
+import { data } from '../../../View/constants'
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
