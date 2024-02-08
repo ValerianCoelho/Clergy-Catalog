@@ -17,7 +17,7 @@ function DisplayDeleted() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {details.map((person, index) => (
+          {data.map((person, index) => (
             <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell>{person.fname}</TableCell>
               <TableCell>{person.lname}</TableCell>
