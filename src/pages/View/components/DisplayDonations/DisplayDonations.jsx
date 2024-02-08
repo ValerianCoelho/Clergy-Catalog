@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 function DisplayDonations({ donations }) {
   useEffect(() => {
-    console.log(donations);
+    console.log("Hello", donations)
   }, []);
   return (
     <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
@@ -24,7 +24,7 @@ function DisplayDonations({ donations }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {donations && donations.map((donation, index) => (
+          {donations && donations.map((donations, index) => (
             <TableRow
               key={index}
               sx={{
@@ -32,11 +32,11 @@ function DisplayDonations({ donations }) {
                 backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
               }}
             >
-              <TableCell>{donation.date}</TableCell>
-              <TableCell>{donation.amount}</TableCell>
-              <TableCell>{donation.paymentMode}</TableCell>
-              <TableCell>{donation.recieptNo}</TableCell>
-              <TableCell>{donation.purpose}</TableCell>
+              <TableCell>{donations.date}</TableCell>
+              <TableCell>{donations.amount}</TableCell>
+              <TableCell>{donations.paymentMode}</TableCell>
+              <TableCell>{donations.receipt}</TableCell>
+              <TableCell>{donations.purpose}</TableCell>
             </TableRow>
           ))}
         </TableBody>

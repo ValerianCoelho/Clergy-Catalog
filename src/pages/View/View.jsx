@@ -48,14 +48,14 @@ function View(props) {
       );
   
       // Wait for all donation promises to resolve
-      const donations = await Promise.all(donationPromises);
+      const donationsList = await Promise.all(donationPromises);
       
       // Combine person and donation data
       const details = people.map((person, index) => ({
         ...person,
-        donation: donations[index]
+        donations: donationsList[index]
       }));
-      console.log("Hello", details)
+      // console.log("Hello", details)
   
       setData(details);
       console.log(details);
