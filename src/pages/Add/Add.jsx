@@ -89,70 +89,54 @@ function Add() {
 
   async function handleSubmit() {
     // const result = await db.select(`SELECT name FROM sqlite_master WHERE type='table';`)
-    const result = await db.select(`select * from person`)
+    // const result = await db.select(`select * from person`)
     // const result = await db.execute(`DROP TABLE IF EXISTS donation;`)
     // const result = await db.execute(`DELETE FROM donation;`)
-    // const result = await db.execute(`
-    // INSERT INTO person (fname, lname, email, contact1, contact2, contact3, pan, sbn, beneficiary1, beneficiary2, address) VALUES
-    // ('John', 'Doe', 'john.doe@email.com', 1234567890, 9876543210, 4567890123, 1234567890123456, 100001, 'Alice', 'Bob', '123 Main Street'),
-    // ('Alice', 'Smith', 'alice.smith@email.com', 9876543210, 1234567890, 7890123456, 6543210987654321, 100002, 'Charlie', 'David', '456 Oak Avenue'),
-    // ('Bob', 'Johnson', 'bob.johnson@email.com', 4567890123, 7890123456, 1234567890, 7890123456789012, 100003, 'Emma', 'Frank', '789 Pine Lane'),
-    // ('Charlie', 'Williams', 'charlie.williams@email.com', 7890123456, 4567890123, 9876543210, 5678901234567890, 100004, 'Grace', 'Henry', '101 Cedar Road'),
-    // ('David', 'Taylor', 'david.taylor@email.com', 1234567890, 7890123456, 4567890123, 3456789012345678, 100005, 'Isabel', 'James', '202 Elm Street');
-    
-    // INSERT INTO donation (sbn, purpose, amount, paymentMode, date, receipt) VALUES
-    // (100001, 'Education Fund', 500.00, 'Credit Card', '2024-01-01', 101),
-    // (100002, 'Medical Expenses', 1000.00, 'PayPal', '2024-02-05', 102),
-    // (100003, 'Community Development', 750.50, 'Bank Transfer', '2024-03-10', 103),
-    // (100004, 'Environmental Conservation', 1200.75, 'Cash', '2024-04-15', 104),
-    // (100005, 'Animal Welfare', 300.25, 'Cheque', '2024-05-20', 105);
-    
-    // `);
-    console.log(result)
+    // console.log(result)
 
-    // const person = {
-    //   query: `
-    //     INSERT INTO person (address, beneficiary1, beneficiary2, contact1, contact2, contact3, email, fname, lname, pan, sbn)
-    //     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-    //   `,
-    //   values: [
-    //     formData.address,
-    //     formData.beneficiary1,
-    //     formData.beneficiary2,
-    //     formData.contact1,
-    //     formData.contact2,
-    //     formData.contact3,
-    //     formData.email,
-    //     formData.fname,
-    //     formData.lname,
-    //     formData.pan,
-    //     formData.sbn,
-    //   ],
-    // };
-    // await db.execute(person.query, person.values);
+    const person = {
+      query: `
+        INSERT INTO person (address, beneficiary1, beneficiary2, contact1, contact2, contact3, email, fname, lname, pan, sbn)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      `,
+      values: [
+        formData.address,
+        formData.beneficiary1,
+        formData.beneficiary2,
+        formData.contact1,
+        formData.contact2,
+        formData.contact3,
+        formData.email,
+        formData.fname,
+        formData.lname,
+        formData.pan,
+        formData.sbn,
+      ],
+    };
+    await db.execute(person.query, person.values);
 
-    // for (const donationKey in formData.donations) {
-    //   if (Object.hasOwnProperty.call(formData.donations, donationKey)) {
-    //     const donation = formData.donations[donationKey];
+    for (const donationKey in formData.donations) {
+      if (Object.hasOwnProperty.call(formData.donations, donationKey)) {
+        const donation = formData.donations[donationKey];
         
-    //     const donationData = {
-    //       query: `
-    //         INSERT INTO donation (sbn, amount, date, paymentMode, purpose, receipt)
-    //         VALUES (?, ?, ?, ?, ?, ?);
-    //       `,
-    //       values: [
-    //         formData.sbn,
-    //         donation.amount,
-    //         donation.date,
-    //         donation.paymentMode,
-    //         donation.purpose,
-    //         donation.receipt,
-    //       ],
-    //     };
+        const donationData = {
+          query: `
+            INSERT INTO donation (sbn, amount, date, paymentMode, purpose, receipt)
+            VALUES (?, ?, ?, ?, ?, ?);
+          `,
+          values: [
+            formData.sbn,
+            donation.amount,
+            donation.date,
+            donation.paymentMode,
+            donation.purpose,
+            donation.receipt,
+          ],
+        };
     
-    //     await db.execute(donationData.query, donationData.values);
-    //   }
-    // }
+        await db.execute(donationData.query, donationData.values);
+      }
+    }
     
   }
 

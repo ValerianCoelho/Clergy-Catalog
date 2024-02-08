@@ -37,25 +37,29 @@ function View(props) {
   }, [])
 
   async function fetchDetails(props) {
-    const people = await db.select("SELECT * FROM person;");
-    const donations = await db.select("SELECT * FROM donation;");
+    // const people = await db.select("SELECT * FROM person;");
+    // const donations = await db.select("SELECT * FROM donation;");
+    const donations = await db.select("SELECT * FROM person join donation on person.sbn = donation.sbn;");
+    console.log(donations)
+    // const details = {...people};
+
+    // console.log(people, donations)
+    // const details = [];
+    // for (const person of people) {
+    //   // combine both beneficiaries in UI
+    //   person.beneficiary =
+    //     person.beneficiary1 +
+    //     (person.beneficiary2 ? `, ${person.beneficiary2}` : "");
   
-    const details = [];
-    for (const person of people) {
-      // combine both beneficiaries in UI
-      person.beneficiary =
-        person.beneficiary1 +
-        (person.beneficiary2 ? `, ${person.beneficiary2}` : "");
-  
-      person.donations = [];
-      for (const donation of donations) {
-        if (donation.sbn != person.sbn) continue;
-        person.donations.push(donation);
-      }
-      details.push(person);
-    }
-    console.log(details);
-    return details;
+    //   person.donations = [];
+    //   for (const donation of donations) {
+    //     if (donation.sbn != person.sbn) continue;
+    //     person.donations.push(donation);
+    //   }
+    //   details.push(person);
+    // }
+    // console.log(details);
+    // return details;
   }
 
   return (
