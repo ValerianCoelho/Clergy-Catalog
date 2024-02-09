@@ -58,7 +58,6 @@ function View(props) {
       // console.log("Hello", details)
   
       setData(details);
-      console.log(details);
     } catch (error) {
       console.error("Error fetching details:", error);
     }

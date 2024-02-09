@@ -5,7 +5,6 @@ const initialState = {
 }
 
 const sbnReducer = (state = initialState, action)=> {
-  console.log(state)
   switch(action.type) {
     case SET_SBN: {
       return {

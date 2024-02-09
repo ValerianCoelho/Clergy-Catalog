@@ -8,9 +8,6 @@ import TableCell from "@mui/material/TableCell";
 import { useEffect } from "react";
 
 function DisplayDonations({ donations }) {
-  useEffect(() => {
-    console.log("Hello", donations)
-  }, []);
   return (
     <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
       <Table>

@@ -118,7 +118,7 @@ function Add() {
     for (const donationKey in formData.donations) {
       if (Object.hasOwnProperty.call(formData.donations, donationKey)) {
         const donation = formData.donations[donationKey];
-        
+
         const donationData = {
           query: `
             INSERT INTO donation (sbn, amount, date, paymentMode, purpose, receipt)
@@ -133,11 +133,10 @@ function Add() {
             donation.receipt,
           ],
         };
-    
+
         await db.execute(donationData.query, donationData.values);
       }
     }
-    
   }
 
   const handleAddDonation = () => {
@@ -252,11 +251,10 @@ function Add() {
                     sx={{ width: "100%" }}
                     onChange={(e) => {
                       const date = new Date(e["$d"]);
-                      const value = `${date.getDate()}/${
-                        date.getMonth() + 1
-                      }/${date.getFullYear()}`;
+                      const value = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
                       handleChange(id, value, true, index);
                     }}
+                    format="DD/MM/YYYY"
                     required
                   />
                 )}
