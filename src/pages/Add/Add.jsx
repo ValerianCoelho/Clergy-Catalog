@@ -208,6 +208,7 @@ function Add() {
               onChange={(e) => {
                 handleChange(id, e.target.value);
               }}
+              required
             />
           </Grid>
         ))}
@@ -238,6 +239,7 @@ function Add() {
                     onChange={(e) => {
                       handleChange(id, e.target.value, true, index);
                     }}
+                    required
                   >
                     <MenuItem value="cheque">Cheque</MenuItem>
                     <MenuItem value="card">Card</MenuItem>
@@ -255,6 +257,7 @@ function Add() {
                       }/${date.getFullYear()}`;
                       handleChange(id, value, true, index);
                     }}
+                    required
                   />
                 )}
                 {(type === "text" || type === "number") && (
@@ -267,6 +270,7 @@ function Add() {
                     onChange={(e) => {
                       handleChange(id, e.target.value, true, index);
                     }}
+                    required
                   />
                 )}
               </Grid>

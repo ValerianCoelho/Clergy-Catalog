@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { data } from "./constants";
 import db from "../../backend/database";
-import { changeTab } from '../../store/index'
+import { changeTab, setSbn } from '../../store/index'
 import { connect } from "react-redux";
 
 import Heading from "../../components/Heading/Heading";
@@ -122,7 +122,8 @@ function View(props) {
                         sx={{marginBottom: 2}} 
                         disableElevation
                         onClick={()=>{
-                          props.changeTab('edit')
+                          props.setSbn(person.sbn);
+                          props.changeTab('edit');
                         }}
                       >
                         Edit Record
@@ -142,6 +143,7 @@ function View(props) {
 const mapStateToProps = (state) => {
   return {
     tab: state.tab.tab,
+    sbn: state.sbn.sbn
   }
 }
 
@@ -149,6 +151,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     changeTab: (tab)=> {
       dispatch(changeTab(tab))
+    },
+    setSbn: (sbn)=> {
+      dispatch(setSbn(sbn))
     }
   }
 }
