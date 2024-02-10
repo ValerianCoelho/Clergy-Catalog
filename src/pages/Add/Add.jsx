@@ -64,6 +64,8 @@ function Title(props) {
 }
 
 function Add() {
+  const [errorMsg, setErrorMsg] = useState('');
+  const [errorInput, setErrorInput] = useState('');
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -88,11 +90,27 @@ function Add() {
   });
 
   async function handleSubmit() {
-    // const result = await db.select(`SELECT name FROM sqlite_master WHERE type='table';`)
-    // const result = await db.select(`select * from person`)
-    // const result = await db.execute(`DROP TABLE IF EXISTS donation;`)
-    // const result = await db.execute(`DELETE FROM donation;`)
-    // console.log(result)
+    if(formData.sbn.toString().length == 0) {
+      setErrorMsg(`Please Fill in the SBN`);
+      setErrorInput('sbn');
+      return;
+    }
+    if(formData.fname.length == 0) {
+      setErrorMsg(`Please Fill in the First Name`);
+      setErrorInput('fname');
+      return;
+    }
+    if(formData.lname.length == 0) {
+      setErrorMsg(`Please Fill in the Last Name`)
+      setErrorInput('lname');
+      return;
+    }
+    const sbn = await db.select(`SELECT * FROM PERSON WHERE sbn = ${formData.sbn}`)
+    if(sbn.toString().length > 0) {
+      setErrorMsg(`Database Contains Record with SBN = ${formData.sbn}`)
+      setErrorInput('sbn');
+      return;
+    }
 
     const person = {
       query: `
@@ -208,6 +226,7 @@ function Add() {
                 handleChange(id, e.target.value);
               }}
               required
+              error={errorInput === id ? true : false }
             />
           </Grid>
         ))}
