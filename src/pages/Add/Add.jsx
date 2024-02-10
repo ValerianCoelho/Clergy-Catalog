@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { inputStructure } from "./constants";
 import Heading from "../../components/Heading/Heading";
 import db from "../../backend/database";
+import { setDialogState } from "../../store/index";
+import { connect } from "react-redux";
+import AlertDialog from "../../components/AlertDialog/AlterDialog"
 
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -63,8 +66,7 @@ function Title(props) {
   );
 }
 
-function Add() {
-  const [errorMsg, setErrorMsg] = useState('');
+function Add(props) {
   const [errorInput, setErrorInput] = useState('');
   const [formData, setFormData] = useState({
     fname: "",
@@ -91,24 +93,24 @@ function Add() {
 
   async function handleSubmit() {
     if(formData.sbn.toString().length == 0) {
-      setErrorMsg(`Please Fill in the SBN`);
       setErrorInput('sbn');
+      props.setDialogState(true, 'Error Occured', 'Please Fill in the SBN')
       return;
     }
     if(formData.fname.length == 0) {
-      setErrorMsg(`Please Fill in the First Name`);
       setErrorInput('fname');
+      props.setDialogState(true, 'Error Occured', 'Please Fill in the First Name')
       return;
     }
     if(formData.lname.length == 0) {
-      setErrorMsg(`Please Fill in the Last Name`)
       setErrorInput('lname');
+      props.setDialogState(true, 'Error Occured', 'Please Fill in the Last Name')
       return;
     }
     const sbn = await db.select(`SELECT * FROM PERSON WHERE sbn = ${formData.sbn}`)
     if(sbn.toString().length > 0) {
-      setErrorMsg(`Database Contains Record with SBN = ${formData.sbn}`)
       setErrorInput('sbn');
+      props.setDialogState(true, 'Error Occured', `Database Contains Record with SBN = ${formData.sbn}`)
       return;
     }
 
@@ -304,8 +306,23 @@ function Add() {
       >
         Add Record
       </Button>
+      <AlertDialog/>
     </>
   );
 }
 
-export default Add;
+const mapStateToProps = (state) => {
+  return {
+
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setDialogState: (open, title, msg) => {
+      dispatch(setDialogState(open, title, msg));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Add);
