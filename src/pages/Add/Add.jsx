@@ -19,7 +19,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-function Title(props) {
+export function DonationTitle(props) {
   return (
     <>
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
@@ -237,7 +237,7 @@ function Add(props) {
         <React.Fragment key={index}>
           <Heading
             title={
-              <Title
+              <DonationTitle
                 handleAddDonation={handleAddDonation}
                 handleRemoveDonation={handleRemoveDonation}
                 index={index}

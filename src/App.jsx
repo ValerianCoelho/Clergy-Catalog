@@ -14,6 +14,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 const theme = createTheme({
   palette: {
     grey: createColor('#E9ECEF'),
+    blue: createColor('#1976d2'),
   },
 });
 

@@ -11,57 +11,25 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Stack from "@mui/material/Stack";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DonationTitle } from "../Add/Add";
+import Stack from "@mui/material/Stack"
+import Typography from "@mui/material/Typography"
+import DeleteIcon from '@mui/icons-material/Delete';
+import ReplyIcon from '@mui/icons-material/Reply';
+import { IconButton } from "@mui/material";
 
-function Title(props) {
+function Title() {
   return (
     <>
-      <Stack direction={"row"} alignItems={"center"} spacing={2}>
-        <Typography variant="h5">Donation {props.index + 1}</Typography>
-        {props.isLast && (
-          <ListItemAvatar>
-            <Stack direction={"row"} spacing={1} alignItems={"center"}>
-              <Avatar
-                sx={{
-                  width: 32,
-                  height: 32,
-                  backgroundColor: "rgba(64, 192, 87, .1)",
-                }}
-              >
-                <IconButton onClick={props.handleAddDonation}>
-                  <AddIcon
-                    fontSize="small"
-                    sx={{ color: "rgba(64, 192, 87, 1)" }}
-                  />
-                </IconButton>
-              </Avatar>
-              {!props.isFirst && (
-                <Avatar
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    backgroundColor: "rgba(192, 64, 64, .1)",
-                  }}
-                >
-                  <IconButton onClick={props.handleRemoveDonation}>
-                    <RemoveIcon
-                      fontSize="small"
-                      color="error"
-                      sx={{ color: "rgb(192, 64, 64)" }}
-                    />
-                  </IconButton>
-                </Avatar>
-              )}
-            </Stack>
-          </ListItemAvatar>
-        )}
+      <Stack direction={'row'} alignItems={'center'} spacing={1}>
+        <Typography variant="h5" sx={{flex: 1}}>Edit Record</Typography>
+        <Button variant="contained" color="primary" disableElevation startIcon={<ReplyIcon/>} >
+          Return
+        </Button>
+        <Button variant="contained" color="error" disableElevation startIcon={<DeleteIcon/>} >
+          Delete
+        </Button>
       </Stack>
     </>
   );
@@ -232,7 +200,7 @@ function Edit(props) {
 
   return (
     <>
-      <Heading title={"Edit Record"} />
+      <Heading title={<Title/>} />
       <Grid container spacing={2}>
         {inputStructure.user.map(({ id, label, type }) => (
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={id}>
@@ -256,7 +224,7 @@ function Edit(props) {
         <React.Fragment key={index}>
           <Heading
             title={
-              <Title
+              <DonationTitle
                 handleAddDonation={handleAddDonation}
                 handleRemoveDonation={handleRemoveDonation}
                 index={index}
