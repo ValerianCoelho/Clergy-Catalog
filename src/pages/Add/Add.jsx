@@ -227,7 +227,6 @@ function Add(props) {
               onChange={(e) => {
                 handleChange(id, e.target.value);
               }}
-              required
               error={errorInput === id ? true : false }
             />
           </Grid>
@@ -321,7 +320,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setDialogState: (open, title, msg) => {
       dispatch(setDialogState(open, title, msg));
-    }
+    },
   };
 };
 

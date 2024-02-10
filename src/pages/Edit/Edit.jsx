@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { inputStructure } from "../Add/constants";
 import Heading from "../../components/Heading/Heading";
 import db from "../../backend/database";
-import { changeTab, setSbn } from "../../store/index";
+import { changeTab, setSbn, setDialogState } from "../../store/index";
 import { connect } from "react-redux";
 import dayjs from "dayjs";
+import AlertDialog from "../../components/AlertDialog/AlterDialog"
 
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -67,6 +68,7 @@ function Title(props) {
 }
 
 function Edit(props) {
+  const [errorInput, setErrorInput] = useState('');
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -97,7 +99,6 @@ function Edit(props) {
   useEffect(() => {
     console.log("Form Data", formData);
   }, [formData]);
-
 
   async function fetchDetails() {
     try {
@@ -158,6 +159,77 @@ function Edit(props) {
     }
   };
 
+  async function handleSaveChanges() {
+    if(formData.sbn.toString().length == 0) {
+      setErrorInput('sbn');
+      props.setDialogState(true, 'Error Occured', 'Please Fill in the SBN')
+      return;
+    }
+    if(formData.fname.length == 0) {
+      setErrorInput('fname');
+      props.setDialogState(true, 'Error Occured', 'Please Fill in the First Name')
+      return;
+    }
+    if(formData.lname.length == 0) {
+      setErrorInput('lname');
+      props.setDialogState(true, 'Error Occured', 'Please Fill in the Last Name')
+      return;
+    }
+    const sbn = await db.select(`SELECT * FROM PERSON WHERE sbn = ${formData.sbn}`)
+    if(sbn.toString().length > 0 && props.sbn !== formData.sbn) {
+      setErrorInput('sbn');
+      props.setDialogState(true, 'Error Occured', `Database Contains Record with SBN = ${formData.sbn}`)
+      return;
+    }
+
+    await db.execute(`DELETE FROM person WHERE sbn = ${props.sbn}`)
+    await db.execute(`DELETE FROM donation WHERE sbn = ${props.sbn}`)
+
+    const person = {
+      query: `
+        INSERT INTO person (address, beneficiary1, beneficiary2, contact1, contact2, contact3, email, fname, lname, pan, sbn)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      `,
+      values: [
+        formData.address,
+        formData.beneficiary1,
+        formData.beneficiary2,
+        formData.contact1,
+        formData.contact2,
+        formData.contact3,
+        formData.email,
+        formData.fname,
+        formData.lname,
+        formData.pan,
+        formData.sbn,
+      ],
+    };
+    await db.execute(person.query, person.values);
+
+    for (const donationKey in formData.donations) {
+      if (Object.hasOwnProperty.call(formData.donations, donationKey)) {
+        const donation = formData.donations[donationKey];
+
+        const donationData = {
+          query: `
+            INSERT INTO donation (sbn, amount, date, paymentMode, purpose, receipt)
+            VALUES (?, ?, ?, ?, ?, ?);
+          `,
+          values: [
+            formData.sbn,
+            donation.amount,
+            donation.date,
+            donation.paymentMode,
+            donation.purpose,
+            donation.receipt,
+          ],
+        };
+
+        await db.execute(donationData.query, donationData.values);
+      }
+    }
+  }
+
   return (
     <>
       <Heading title={"Edit Record"} />
@@ -174,6 +246,7 @@ function Edit(props) {
                 handleChange(id, e.target.value);
               }}
               value={formData[id]}
+              error={errorInput === id ? true : false }
             />
           </Grid>
         ))}
@@ -244,35 +317,15 @@ function Edit(props) {
         </React.Fragment>
       ))}
 
-      <Stack direction={"row"} spacing={2} sx={{ my: 2 }}>
         <Button
+        sx={{my: 2}}
           variant="contained"
           fullWidth={true}
-          onClick={() => {
-            props.changeTab("view");
-          }}
-        >
-          Stop Editing
-        </Button>
-        <Button
-          variant="contained"
-          fullWidth={true}
-          onClick={() => {
-            props.changeTab("view");
-          }}
+          onClick={handleSaveChanges}
         >
           Save Changes
         </Button>
-        <Button
-          variant="contained"
-          fullWidth={true}
-          onClick={() => {
-            props.changeTab("view");
-          }}
-        >
-          Delete Record
-        </Button>
-      </Stack>
+        <AlertDialog/>
     </>
   );
 }
@@ -291,7 +344,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     setSbn: (sbn)=> {
       dispatch(setSbn(sbn))
-    }
+    },
+    setDialogState: (open, title, msg) => {
+      dispatch(setDialogState(open, title, msg));
+    },
   };
 };
 
