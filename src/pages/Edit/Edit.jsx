@@ -19,12 +19,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReplyIcon from '@mui/icons-material/Reply';
 import { IconButton } from "@mui/material";
 
-function Title() {
+function Title(props) {
   return (
     <>
       <Stack direction={'row'} alignItems={'center'} spacing={1}>
         <Typography variant="h5" sx={{flex: 1}}>Edit Record</Typography>
-        <Button variant="contained" color="primary" disableElevation startIcon={<ReplyIcon/>} >
+        <Button variant="contained" color="primary" disableElevation startIcon={<ReplyIcon/>} onClick={props.handleReturn}>
           Return
         </Button>
         <Button variant="contained" color="error" disableElevation startIcon={<DeleteIcon/>} >
@@ -200,7 +200,7 @@ function Edit(props) {
 
   return (
     <>
-      <Heading title={<Title/>} />
+      <Heading title={<Title handleReturn={()=>(props.changeTab('view'))}/>} />
       <Grid container spacing={2}>
         {inputStructure.user.map(({ id, label, type }) => (
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={id}>

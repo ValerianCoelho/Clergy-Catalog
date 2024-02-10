@@ -116,8 +116,8 @@ function Add(props) {
 
     const person = {
       query: `
-        INSERT INTO person (address, beneficiary1, beneficiary2, contact1, contact2, contact3, email, fname, lname, pan, sbn)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO person (address, beneficiary1, beneficiary2, contact1, contact2, contact3, email, fname, lname, pan, sbn, isDeleted)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       `,
       values: [
         formData.address,
@@ -131,6 +131,7 @@ function Add(props) {
         formData.lname,
         formData.pan,
         formData.sbn,
+        "false"
       ],
     };
     await db.execute(person.query, person.values);
@@ -187,10 +188,6 @@ function Add(props) {
       };
     });
   };
-
-  useEffect(() => {
-    console.log(formData.donations);
-  }, [formData]);
 
   const handleChange = (attribute, value, donation, index) => {
     if (!donation) {

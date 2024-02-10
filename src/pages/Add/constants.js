@@ -33,7 +33,7 @@ export const inputStructure = {
       {
         id: "pan",
         label: "PAN Number",
-        type: "number",
+        type: "text",
       },
       {
         id: "sbn",
@@ -80,7 +80,7 @@ export const inputStructure = {
       {
         id: "receipt",
         label: "Receipt Number",
-        type: "number",
+        type: "text",
       },
     ],
   };
