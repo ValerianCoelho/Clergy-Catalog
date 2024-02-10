@@ -109,7 +109,8 @@ function View(props) {
               (person, index) =>
                 (typeof person[searchAttribute] === "number"
                   ? person[searchAttribute].toString().toLowerCase().includes(searchKey)
-                  : person[searchAttribute].toLowerCase().includes(searchKey)) && (
+                  : person[searchAttribute].toLowerCase().includes(searchKey)) && 
+                  (person.isDeleted === 'false') && (
                   <React.Fragment key={index}>
                     <TableRow
                       sx={{

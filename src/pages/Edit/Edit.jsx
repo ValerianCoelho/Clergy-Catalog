@@ -5,7 +5,7 @@ import db from "../../backend/database";
 import { changeTab, setSbn, setDialogState } from "../../store/index";
 import { connect } from "react-redux";
 import dayjs from "dayjs";
-import AlertDialog from "../../components/AlertDialog/AlterDialog"
+import AlertDialog from "../../components/AlertDialog/AlterDialog";
 
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -13,21 +13,35 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DonationTitle } from "../Add/Add";
-import Stack from "@mui/material/Stack"
-import Typography from "@mui/material/Typography"
-import DeleteIcon from '@mui/icons-material/Delete';
-import ReplyIcon from '@mui/icons-material/Reply';
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ReplyIcon from "@mui/icons-material/Reply";
 import { IconButton } from "@mui/material";
 
 function Title(props) {
   return (
     <>
-      <Stack direction={'row'} alignItems={'center'} spacing={1}>
-        <Typography variant="h5" sx={{flex: 1}}>Edit Record</Typography>
-        <Button variant="contained" color="primary" disableElevation startIcon={<ReplyIcon/>} onClick={props.handleReturn}>
+      <Stack direction={"row"} alignItems={"center"} spacing={1}>
+        <Typography variant="h5" sx={{ flex: 1 }}>
+          Edit Record
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          disableElevation
+          startIcon={<ReplyIcon />}
+          onClick={props.handleReturn}
+        >
           Return
         </Button>
-        <Button variant="contained" color="error" disableElevation startIcon={<DeleteIcon/>} >
+        <Button
+          variant="contained"
+          color="error"
+          disableElevation
+          startIcon={<DeleteIcon />}
+          onClick={props.handleDelete}
+        >
           Delete
         </Button>
       </Stack>
@@ -36,7 +50,7 @@ function Title(props) {
 }
 
 function Edit(props) {
-  const [errorInput, setErrorInput] = useState('');
+  const [errorInput, setErrorInput] = useState("");
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -60,9 +74,9 @@ function Edit(props) {
     },
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchDetails();
-  }, [])
+  }, []);
 
   useEffect(() => {
     console.log("Form Data", formData);
@@ -70,11 +84,15 @@ function Edit(props) {
 
   async function fetchDetails() {
     try {
-      const person = await db.select(`SELECT * FROM person where sbn=${props.sbn}`);
-      const donations = await db.select(`SELECT * FROM donation where sbn=${props.sbn}`);
-      setFormData({...person[0], donations})
-    } catch(error) {
-      console.log(error)
+      const person = await db.select(
+        `SELECT * FROM person where sbn=${props.sbn}`
+      );
+      const donations = await db.select(
+        `SELECT * FROM donation where sbn=${props.sbn}`
+      );
+      setFormData({ ...person[0], donations });
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -128,30 +146,44 @@ function Edit(props) {
   };
 
   async function handleSaveChanges() {
-    if(formData.sbn.toString().length == 0) {
-      setErrorInput('sbn');
-      props.setDialogState(true, 'Error Occured', 'Please Fill in the SBN')
+    if (formData.sbn.toString().length == 0) {
+      setErrorInput("sbn");
+      props.setDialogState(true, "Error Occured", "Please Fill in the SBN");
       return;
     }
-    if(formData.fname.length == 0) {
-      setErrorInput('fname');
-      props.setDialogState(true, 'Error Occured', 'Please Fill in the First Name')
+    if (formData.fname.length == 0) {
+      setErrorInput("fname");
+      props.setDialogState(
+        true,
+        "Error Occured",
+        "Please Fill in the First Name"
+      );
       return;
     }
-    if(formData.lname.length == 0) {
-      setErrorInput('lname');
-      props.setDialogState(true, 'Error Occured', 'Please Fill in the Last Name')
+    if (formData.lname.length == 0) {
+      setErrorInput("lname");
+      props.setDialogState(
+        true,
+        "Error Occured",
+        "Please Fill in the Last Name"
+      );
       return;
     }
-    const sbn = await db.select(`SELECT * FROM PERSON WHERE sbn = ${formData.sbn}`)
-    if(sbn.toString().length > 0 && props.sbn !== formData.sbn) {
-      setErrorInput('sbn');
-      props.setDialogState(true, 'Error Occured', `Database Contains Record with SBN = ${formData.sbn}`)
+    const sbn = await db.select(
+      `SELECT * FROM PERSON WHERE sbn = ${formData.sbn}`
+    );
+    if (sbn.toString().length > 0 && props.sbn !== formData.sbn) {
+      setErrorInput("sbn");
+      props.setDialogState(
+        true,
+        "Error Occured",
+        `Database Contains Record with SBN = ${formData.sbn}`
+      );
       return;
     }
 
-    await db.execute(`DELETE FROM person WHERE sbn = ${props.sbn}`)
-    await db.execute(`DELETE FROM donation WHERE sbn = ${props.sbn}`)
+    await db.execute(`DELETE FROM person WHERE sbn = ${props.sbn}`);
+    await db.execute(`DELETE FROM donation WHERE sbn = ${props.sbn}`);
 
     const person = {
       query: `
@@ -198,9 +230,18 @@ function Edit(props) {
     }
   }
 
+  async function handleDelete() {
+    await db.execute(
+      `UPDATE person SET isDeleted = 'true' WHERE sbn = ${props.sbn}`
+    );
+  }
+
   return (
     <>
-      <Heading title={<Title handleReturn={()=>(props.changeTab('view'))}/>} />
+      <Heading
+        title={<Title handleReturn={() => props.changeTab("view")} handleDelete={handleDelete}/>}
+        
+      />
       <Grid container spacing={2}>
         {inputStructure.user.map(({ id, label, type }) => (
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={id}>
@@ -214,7 +255,7 @@ function Edit(props) {
                 handleChange(id, e.target.value);
               }}
               value={formData[id]}
-              error={errorInput === id ? true : false }
+              error={errorInput === id ? true : false}
             />
           </Grid>
         ))}
@@ -285,15 +326,15 @@ function Edit(props) {
         </React.Fragment>
       ))}
 
-        <Button
-        sx={{my: 2}}
-          variant="contained"
-          fullWidth={true}
-          onClick={handleSaveChanges}
-        >
-          Save Changes
-        </Button>
-        <AlertDialog/>
+      <Button
+        sx={{ my: 2 }}
+        variant="contained"
+        fullWidth={true}
+        onClick={handleSaveChanges}
+      >
+        Save Changes
+      </Button>
+      <AlertDialog />
     </>
   );
 }
@@ -301,7 +342,7 @@ function Edit(props) {
 const mapStateToProps = (state) => {
   return {
     tab: state.tab.tab,
-    sbn: state.sbn.sbn
+    sbn: state.sbn.sbn,
   };
 };
 
@@ -309,9 +350,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     changeTab: (tab) => {
       dispatch(changeTab(tab));
-    },
-    setSbn: (sbn)=> {
-      dispatch(setSbn(sbn))
     },
     setDialogState: (open, title, msg) => {
       dispatch(setDialogState(open, title, msg));
