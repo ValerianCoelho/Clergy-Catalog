@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { changeTab } from "../../store/index";
 import db from "../../backend/database";
 import dayjs from "dayjs";
+import { scrollToTop } from "../../utils/scrollToTop";
 
 import Heading from "../../components/Heading/Heading";
 import DialogBox from "../../components/Dialog/Dialog";
@@ -86,6 +87,7 @@ function Edit(props) {
 
   useEffect(() => {
     fetchDetails();
+    scrollToTop();
   }, []);
 
   async function fetchDetails() {
@@ -243,7 +245,6 @@ function Edit(props) {
             donation.receipt,
           ],
         };
-
         await db.execute(donationData.query, donationData.values);
       }
     }
@@ -252,20 +253,10 @@ function Edit(props) {
       open: true,
       title: "Record Updated",
       msg: "Changes Saved Successfully",
-      option1: 'Okay',
-      variant: 'single'
+      option1: "Continue Editing",
+      option2: "Return",
+      variant: "multiple",
     });
-  }
-
-  async function handleDelete() {
-    await db.execute(
-      `UPDATE person SET isDeleted = 'true' WHERE sbn = ${props.sbn}`
-    );
-    setDialogData({
-      ...dialogData,
-      open: false,
-    });
-    props.changeTab("view");
   }
 
   const handleCloseDialog = () => {
@@ -273,6 +264,21 @@ function Edit(props) {
       ...dialogData,
       open: false,
     });
+  };
+
+  async function handleDelete() {
+    await db.execute(
+      `UPDATE person SET isDeleted = 'true' WHERE sbn = ${props.sbn}`
+    );
+    handleCloseDialog();
+    props.changeTab("view");
+    console.log("Handle Delete");
+  }
+
+  const handleReturn = () => {
+    handleCloseDialog();
+    props.changeTab("view");
+    console.log("Handle Return");
   };
 
   const handleOpenDialog = () => {
@@ -357,7 +363,7 @@ function Edit(props) {
                       }/${date.getFullYear()}`;
                       handleChange(id, value, true, index);
                     }}
-                    value={dayjs(formData.donations[index][id])}
+                    value={dayjs(formData.donations[index][id], "D/M/Y")}
                     format="DD/MM/YYYY"
                   />
                 )}
@@ -395,8 +401,11 @@ function Edit(props) {
         option1={dialogData.option1}
         option2={dialogData.option2}
         handleOption1={handleCloseDialog}
-        handleOption2={handleDelete}
+        handleOption2={
+          dialogData.title === "Record Updated" ? handleReturn : handleDelete
+        }
         variant={dialogData.variant}
+        color={dialogData.title === "Record Updated" ? "success" : "error"}
       />
     </>
   );

@@ -1,9 +1,10 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { inputStructure } from "./constants";
 import Heading from "../../components/Heading/Heading";
 import db from "../../backend/database";
 import dayjs from "dayjs";
+import { scrollToTop } from "../../utils/scrollToTop";
 
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -73,6 +74,10 @@ function Add(props) {
     title: "",
     msg: "",
   });
+
+  useEffect(()=> {
+    scrollToTop()
+  }, [])
 
   const [formData, setFormData] = useState({
     fname: "",

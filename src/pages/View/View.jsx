@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { changeTab, setSbn } from "../../store/index";
 import { connect } from "react-redux";
 import db from "../../backend/database";
+import { scrollToTop } from "../../utils/scrollToTop";
 
 import Heading from "../../components/Heading/Heading";
 import DisplayDonations from "./components/DisplayDonations/DisplayDonations";
@@ -35,11 +36,12 @@ function View(props) {
 
   useEffect(() => {
     fetchDetails();
+    scrollToTop();
   }, []);
 
   async function fetchDetails() {
     try {
-      const people = await db.select("SELECT * FROM person");
+      const people = await db.select("SELECT * FROM person ORDER BY fname ASC");
 
       // Create an array of promises for fetching donations
       const donationPromises = people.map((person) =>
@@ -107,9 +109,14 @@ function View(props) {
             {data.map(
               (person, index) =>
                 (typeof person[searchAttribute] === "number"
-                  ? person[searchAttribute].toString().toLowerCase().includes(searchKey)
-                  : person[searchAttribute].toLowerCase().includes(searchKey)) && 
-                  (person.isDeleted === 'false') && (
+                  ? person[searchAttribute]
+                      .toString()
+                      .toLowerCase()
+                      .includes(searchKey)
+                  : person[searchAttribute]
+                      .toLowerCase()
+                      .includes(searchKey)) &&
+                person.isDeleted === "false" && (
                   <React.Fragment key={index}>
                     <TableRow
                       sx={{

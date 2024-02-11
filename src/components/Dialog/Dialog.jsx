@@ -28,7 +28,7 @@ function DialogBox(props) {
               variant="contained"
               onClick={props.handleOption2}
               disableElevation
-              color="error"
+              color={props.color}
             >
               {props.option2}
             </Button>
