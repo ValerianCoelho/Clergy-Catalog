@@ -1,1 +1,0 @@
-export const SET_DIALOG_STATE = 'SET_DIALOG_STATE';

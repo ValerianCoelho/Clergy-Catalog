@@ -97,7 +97,7 @@ function DisplayDeleted() {
                     <TableCell>
                       <Stack direction={"row"} spacing={2}>
                         <Button
-                          variant="contained"
+                          variant="outlined"
                           color="success"
                           disableElevation
                           startIcon={<RestoreFromTrashIcon />}
@@ -106,7 +106,7 @@ function DisplayDeleted() {
                           Restore
                         </Button>
                         <Button
-                          variant="contained"
+                          variant="outlined"
                           color="error"
                           disableElevation
                           startIcon={<DeleteForeverIcon />}

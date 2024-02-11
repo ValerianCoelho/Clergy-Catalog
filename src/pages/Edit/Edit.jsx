@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { inputStructure } from "../Add/constants";
 import Heading from "../../components/Heading/Heading";
 import db from "../../backend/database";
-import { changeTab, setSbn, setDialogState } from "../../store/index";
+import { changeTab } from "../../store/index";
 import { connect } from "react-redux";
 import dayjs from "dayjs";
-import AlertDialog from "../../components/AlertDialog/AlterDialog";
+import DialogBox from "../../components/AlertDialog/Dialog";
 
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -17,7 +17,6 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReplyIcon from "@mui/icons-material/Reply";
-import { IconButton } from "@mui/material";
 
 function Title(props) {
   return (
@@ -40,7 +39,7 @@ function Title(props) {
           color="error"
           disableElevation
           startIcon={<DeleteIcon />}
-          onClick={props.handleDelete}
+          onClick={props.handleOpenDialog}
         >
           Delete
         </Button>
@@ -51,6 +50,11 @@ function Title(props) {
 
 function Edit(props) {
   const [errorInput, setErrorInput] = useState("");
+  const [dialogData, setDialogData] = useState({
+    open: false,
+    title: "",
+    msg: "",
+  });
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -148,37 +152,41 @@ function Edit(props) {
   async function handleSaveChanges() {
     if (formData.sbn.toString().length == 0) {
       setErrorInput("sbn");
-      props.setDialogState(true, "Error Occured", "Please Fill in the SBN");
+      setDialogData({
+        open: true,
+        title: "Error Occured",
+        msg: "Please Fill in the SBN",
+      });
       return;
     }
     if (formData.fname.length == 0) {
       setErrorInput("fname");
-      props.setDialogState(
-        true,
-        "Error Occured",
-        "Please Fill in the First Name"
-      );
+      setDialogData({
+        open: true,
+        title: "Error Occured",
+        msg: "Please Fill in the First Name",
+      });
       return;
     }
     if (formData.lname.length == 0) {
       setErrorInput("lname");
-      props.setDialogState(
-        true,
-        "Error Occured",
-        "Please Fill in the Last Name"
-      );
+      setDialogData({
+        open: true,
+        title: "Error Occured",
+        msg: "Please Fill in the Last Name",
+      });
       return;
     }
     const sbn = await db.select(
       `SELECT * FROM PERSON WHERE sbn = ${formData.sbn}`
     );
-    if (sbn.toString().length > 0 && props.sbn !== formData.sbn) {
+    if (sbn.toString().length > 0) {
       setErrorInput("sbn");
-      props.setDialogState(
-        true,
-        "Error Occured",
-        `Database Contains Record with SBN = ${formData.sbn}`
-      );
+      setDialogData({
+        open: true,
+        title: "Error Occured",
+        msg: `Database Contains Record with SBN = ${formData.sbn}`,
+      });
       return;
     }
 
@@ -234,13 +242,36 @@ function Edit(props) {
     await db.execute(
       `UPDATE person SET isDeleted = 'true' WHERE sbn = ${props.sbn}`
     );
+    setDialogData({
+      ...dialogData,
+      open: false
+    })
   }
+
+  const handleCloseDialog = () => {
+    setDialogData({
+      ...dialogData,
+      open: false,
+    });
+  };
+
+  const handleOpenDialog = () => {
+    setDialogData({
+      open: true,
+      title: "Delete Records",
+      msg: "Deleted Records Can be restored from settings",
+    });
+  };
 
   return (
     <>
       <Heading
-        title={<Title handleReturn={() => props.changeTab("view")} handleDelete={handleDelete}/>}
-        
+        title={
+          <Title
+            handleReturn={() => props.changeTab("view")}
+            handleOpenDialog={handleOpenDialog}
+          />
+        }
       />
       <Grid container spacing={2}>
         {inputStructure.user.map(({ id, label, type }) => (
@@ -334,7 +365,16 @@ function Edit(props) {
       >
         Save Changes
       </Button>
-      <AlertDialog />
+      <DialogBox
+        title={dialogData.title}
+        msg={dialogData.msg}
+        open={dialogData.open}
+        option1={"Cancel"}
+        option2={"Delete"}
+        handleOption1={handleCloseDialog}
+        handleOption2={handleDelete}
+        variant={"multiple"}
+      />
     </>
   );
 }
@@ -350,9 +390,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     changeTab: (tab) => {
       dispatch(changeTab(tab));
-    },
-    setDialogState: (open, title, msg) => {
-      dispatch(setDialogState(open, title, msg));
     },
   };
 };

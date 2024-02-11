@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { inputStructure } from "./constants";
 import Heading from "../../components/Heading/Heading";
 import db from "../../backend/database";
-import { setDialogState } from "../../store/index";
 import { connect } from "react-redux";
-import AlertDialog from "../../components/AlertDialog/AlterDialog"
 
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -18,6 +16,7 @@ import Avatar from "@mui/material/Avatar";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import DialogBox from "../../components/AlertDialog/Dialog";
 
 export function DonationTitle(props) {
   return (
@@ -67,7 +66,13 @@ export function DonationTitle(props) {
 }
 
 function Add(props) {
-  const [errorInput, setErrorInput] = useState('');
+  const [errorInput, setErrorInput] = useState("");
+  const [dialogData, setDialogData] = useState({
+    open: false,
+    title: "",
+    msg: "",
+  });
+
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -92,25 +97,43 @@ function Add(props) {
   });
 
   async function handleSubmit() {
-    if(formData.sbn.toString().length == 0) {
-      setErrorInput('sbn');
-      props.setDialogState(true, 'Error Occured', 'Please Fill in the SBN')
+    if (formData.sbn.toString().length == 0) {
+      setErrorInput("sbn");
+      setDialogData({
+        open: true,
+        title: "Error Occured",
+        msg: "Please Fill in the SBN",
+      });
       return;
     }
-    if(formData.fname.length == 0) {
-      setErrorInput('fname');
-      props.setDialogState(true, 'Error Occured', 'Please Fill in the First Name')
+    if (formData.fname.length == 0) {
+      setErrorInput("fname");
+      setDialogData({
+        open: true,
+        title: "Error Occured",
+        msg: "Please Fill in the First Name",
+      });
       return;
     }
-    if(formData.lname.length == 0) {
-      setErrorInput('lname');
-      props.setDialogState(true, 'Error Occured', 'Please Fill in the Last Name')
+    if (formData.lname.length == 0) {
+      setErrorInput("lname");
+      setDialogData({
+        open: true,
+        title: "Error Occured",
+        msg: "Please Fill in the Last Name",
+      });
       return;
     }
-    const sbn = await db.select(`SELECT * FROM PERSON WHERE sbn = ${formData.sbn}`)
-    if(sbn.toString().length > 0) {
-      setErrorInput('sbn');
-      props.setDialogState(true, 'Error Occured', `Database Contains Record with SBN = ${formData.sbn}`)
+    const sbn = await db.select(
+      `SELECT * FROM PERSON WHERE sbn = ${formData.sbn}`
+    );
+    if (sbn.toString().length > 0) {
+      setErrorInput("sbn");
+      setDialogData({
+        open: true,
+        title: "Error Occured",
+        msg: `Database Contains Record with SBN = ${formData.sbn}`,
+      });
       return;
     }
 
@@ -131,7 +154,7 @@ function Add(props) {
         formData.lname,
         formData.pan,
         formData.sbn,
-        "false"
+        "false",
       ],
     };
     await db.execute(person.query, person.values);
@@ -209,6 +232,13 @@ function Add(props) {
     }
   };
 
+  const handleCloseDialog = () => {
+    setDialogData({
+      ...dialogData,
+      open: false,
+    });
+  };
+
   return (
     <>
       <Heading title={"Create New Record"} />
@@ -224,7 +254,7 @@ function Add(props) {
               onChange={(e) => {
                 handleChange(id, e.target.value);
               }}
-              error={errorInput === id ? true : false }
+              error={errorInput === id ? true : false}
             />
           </Grid>
         ))}
@@ -268,7 +298,9 @@ function Add(props) {
                     sx={{ width: "100%" }}
                     onChange={(e) => {
                       const date = new Date(e["$d"]);
-                      const value = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                      const value = `${date.getDate()}/${
+                        date.getMonth() + 1
+                      }/${date.getFullYear()}`;
                       handleChange(id, value, true, index);
                     }}
                     format="DD/MM/YYYY"
@@ -302,23 +334,16 @@ function Add(props) {
       >
         Add Record
       </Button>
-      <AlertDialog/>
+      <DialogBox
+        title={dialogData.title}
+        msg={dialogData.msg}
+        open={dialogData.open}
+        option1={"Okay"}
+        handleOption1={handleCloseDialog}
+        variant={"single"}
+      />
     </>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-
-  }
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setDialogState: (open, title, msg) => {
-      dispatch(setDialogState(open, title, msg));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Add);
+export default Add;
