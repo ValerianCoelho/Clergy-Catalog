@@ -10,14 +10,13 @@ function DialogBox(props) {
   return (
     <React.Fragment>
       <Dialog open={props.open} onClose={props.handleOption1}>
-        <DialogTitle sx={{ paddingBottom: 1 }}>{props.title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{props.msg}</DialogContentText>
+        <DialogTitle variant="h6" sx={{ paddingBottom: 1 }}>{props.title}</DialogTitle>
+        <DialogContent sx={{pb: 0, m: 0}}>
+          <DialogContentText variant="body1">{props.msg}</DialogContentText>
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "left" }}>
+        <DialogActions sx={{ justifyContent: "left", margin: 2 }}>
           <Button
             onClick={props.handleOption1}
-            sx={{ margin: 1, marginTop: 0 }}
             variant="contained"
             autoFocus
             disableElevation
@@ -27,9 +26,9 @@ function DialogBox(props) {
           {props.variant === "multiple" && (
             <Button
               variant="contained"
-              sx={{ margin: 1, marginTop: 0 }}
               onClick={props.handleOption2}
               disableElevation
+              color="error"
             >
               {props.option2}
             </Button>

@@ -16,7 +16,7 @@ import Avatar from "@mui/material/Avatar";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import DialogBox from "../../components/AlertDialog/Dialog";
+import DialogBox from "../../components/Dialog/Dialog";
 
 export function DonationTitle(props) {
   return (

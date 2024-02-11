@@ -5,7 +5,7 @@ import db from "../../backend/database";
 import { changeTab } from "../../store/index";
 import { connect } from "react-redux";
 import dayjs from "dayjs";
-import DialogBox from "../../components/AlertDialog/Dialog";
+import DialogBox from "../../components/Dialog/Dialog";
 
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -258,8 +258,8 @@ function Edit(props) {
   const handleOpenDialog = () => {
     setDialogData({
       open: true,
-      title: "Delete Records",
-      msg: "Deleted Records Can be restored from settings",
+      title: "Delete Record",
+      msg: "Deleted Records Can be restored from Settings Tab",
     });
   };
 
