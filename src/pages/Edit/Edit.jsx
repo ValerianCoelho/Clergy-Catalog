@@ -57,6 +57,9 @@ function Edit(props) {
     open: false,
     title: "",
     msg: "",
+    option1: "",
+    option2: "",
+    variant: "",
   });
   const [formData, setFormData] = useState({
     fname: "",
@@ -84,10 +87,6 @@ function Edit(props) {
   useEffect(() => {
     fetchDetails();
   }, []);
-
-  useEffect(() => {
-    console.log("Form Data", formData);
-  }, [formData]);
 
   async function fetchDetails() {
     try {
@@ -159,6 +158,8 @@ function Edit(props) {
         open: true,
         title: "Error Occured",
         msg: "Please Fill in the SBN",
+        option1: "Okay",
+        variant: "single",
       });
       return;
     }
@@ -168,6 +169,8 @@ function Edit(props) {
         open: true,
         title: "Error Occured",
         msg: "Please Fill in the First Name",
+        option1: "Okay",
+        variant: "single",
       });
       return;
     }
@@ -177,18 +180,22 @@ function Edit(props) {
         open: true,
         title: "Error Occured",
         msg: "Please Fill in the Last Name",
+        option1: "Okay",
+        variant: "single",
       });
       return;
     }
     const sbn = await db.select(
       `SELECT * FROM PERSON WHERE sbn = ${formData.sbn}`
     );
-    if (sbn.toString().length > 0) {
+    if (sbn.toString().length > 0 && props.sbn !== formData.sbn) {
       setErrorInput("sbn");
       setDialogData({
         open: true,
         title: "Error Occured",
         msg: `Database Contains Record with SBN = ${formData.sbn}`,
+        option1: "Okay",
+        variant: "single",
       });
       return;
     }
@@ -198,8 +205,8 @@ function Edit(props) {
 
     const person = {
       query: `
-        INSERT INTO person (address, beneficiary1, beneficiary2, contact1, contact2, contact3, email, fname, lname, pan, sbn)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO person (address, beneficiary1, beneficiary2, contact1, contact2, contact3, email, fname, lname, pan, sbn, isDeleted)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       `,
       values: [
         formData.address,
@@ -213,6 +220,7 @@ function Edit(props) {
         formData.lname,
         formData.pan,
         formData.sbn,
+        "false",
       ],
     };
     await db.execute(person.query, person.values);
@@ -239,6 +247,14 @@ function Edit(props) {
         await db.execute(donationData.query, donationData.values);
       }
     }
+
+    setDialogData({
+      open: true,
+      title: "Record Updated",
+      msg: "Changes Saved Successfully",
+      option1: 'Okay',
+      variant: 'single'
+    });
   }
 
   async function handleDelete() {
@@ -249,6 +265,7 @@ function Edit(props) {
       ...dialogData,
       open: false,
     });
+    props.changeTab("view");
   }
 
   const handleCloseDialog = () => {
@@ -263,6 +280,9 @@ function Edit(props) {
       open: true,
       title: "Delete Record",
       msg: "Deleted Records Can be restored from Settings Tab",
+      option1: "Cancel",
+      option2: "Delete",
+      variant: "multiple",
     });
   };
 
@@ -372,11 +392,11 @@ function Edit(props) {
         title={dialogData.title}
         msg={dialogData.msg}
         open={dialogData.open}
-        option1={"Cancel"}
-        option2={"Delete"}
+        option1={dialogData.option1}
+        option2={dialogData.option2}
         handleOption1={handleCloseDialog}
         handleOption2={handleDelete}
-        variant={"multiple"}
+        variant={dialogData.variant}
       />
     </>
   );

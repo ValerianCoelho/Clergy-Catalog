@@ -1,8 +1,9 @@
-import React from 'react'
+import React from "react";
 import { useState } from "react";
 import { inputStructure } from "./constants";
 import Heading from "../../components/Heading/Heading";
 import db from "../../backend/database";
+import dayjs from "dayjs";
 
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -137,6 +138,29 @@ function Add(props) {
       return;
     }
 
+    setFormData({
+      fname: "",
+      lname: "",
+      email: "",
+      contact1: "",
+      contact2: "",
+      contact3: "",
+      pan: "",
+      sbn: "",
+      beneficiary1: "",
+      beneficiary2: "",
+      address: "",
+      donations: {
+        0: {
+          purpose: "",
+          amount: "",
+          paymentMode: "",
+          date: "",
+          receipt: "",
+        },
+      },
+    });
+
     const person = {
       query: `
         INSERT INTO person (address, beneficiary1, beneficiary2, contact1, contact2, contact3, email, fname, lname, pan, sbn, isDeleted)
@@ -181,6 +205,12 @@ function Add(props) {
         await db.execute(donationData.query, donationData.values);
       }
     }
+
+    setDialogData({
+      open: true,
+      title: "Added Record",
+      msg: "Record Added Successfully",
+    });
   }
 
   const handleAddDonation = () => {
@@ -254,6 +284,7 @@ function Add(props) {
               onChange={(e) => {
                 handleChange(id, e.target.value);
               }}
+              value={formData[id]}
               error={errorInput === id ? true : false}
             />
           </Grid>
@@ -281,7 +312,7 @@ function Add(props) {
                     select
                     label={label}
                     fullWidth={true}
-                    value={formData.donations[index].paymentMode}
+                    value={formData.donations[index][id]}
                     onChange={(e) => {
                       handleChange(id, e.target.value, true, index);
                     }}
@@ -303,8 +334,8 @@ function Add(props) {
                       }/${date.getFullYear()}`;
                       handleChange(id, value, true, index);
                     }}
+                    value={dayjs(formData.donations[index][id])}
                     format="DD/MM/YYYY"
-                    required
                   />
                 )}
                 {(type === "text" || type === "number") && (
@@ -317,7 +348,7 @@ function Add(props) {
                     onChange={(e) => {
                       handleChange(id, e.target.value, true, index);
                     }}
-                    required
+                    value={formData.donations[index][id]}
                   />
                 )}
               </Grid>
