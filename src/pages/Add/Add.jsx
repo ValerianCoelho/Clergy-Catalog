@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from 'react'
+import { useState } from "react";
 import { inputStructure } from "./constants";
 import Heading from "../../components/Heading/Heading";
 import db from "../../backend/database";
-import { connect } from "react-redux";
 
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -15,8 +15,8 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import DialogBox from "../../components/Dialog/Dialog";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export function DonationTitle(props) {
   return (

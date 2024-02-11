@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { inputStructure } from "../Add/constants";
-import Heading from "../../components/Heading/Heading";
-import db from "../../backend/database";
-import { changeTab } from "../../store/index";
+import React from "react";
+import { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { changeTab } from "../../store/index";
+import db from "../../backend/database";
 import dayjs from "dayjs";
+
+import Heading from "../../components/Heading/Heading";
 import DialogBox from "../../components/Dialog/Dialog";
+import { DonationTitle } from "../Add/Add";
+import { inputStructure } from "../Add/constants";
 
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DonationTitle } from "../Add/Add";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReplyIcon from "@mui/icons-material/Reply";
 
@@ -244,8 +247,8 @@ function Edit(props) {
     );
     setDialogData({
       ...dialogData,
-      open: false
-    })
+      open: false,
+    });
   }
 
   const handleCloseDialog = () => {

@@ -1,10 +1,13 @@
 import ActionCard from "./components/ActionCard/ActionCard";
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Heading from "../../components/Heading/Heading"
-import { Stack, Typography } from "@mui/material";
-import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
-import BackupTableIcon from '@mui/icons-material/BackupTable';
 import DisplayDeleted from "./components/DisplayDeleted/DisplayDeleted";
+
+import Stack from "@mui/material/Stack"
+import Typography from "@mui/material/Typography"
+
+import BackupTableIcon from '@mui/icons-material/BackupTable';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 function Settings() {
     return (

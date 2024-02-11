@@ -1,19 +1,17 @@
-import {
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Button,
-  Stack,
-} from "@mui/material";
 import React from "react";
 import { useState, useEffect } from "react";
 import db from "../../../../backend/database";
 import DialogBox from "../../../../components/Dialog/Dialog";
+
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
 
 import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -107,7 +105,10 @@ function DisplayDeleted() {
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>
                 SBN
               </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+              <TableCell
+                sx={{ color: "white", fontWeight: "bold" }}
+                align="center"
+              >
                 Action
               </TableCell>
             </TableRow>
@@ -126,8 +127,12 @@ function DisplayDeleted() {
                       <TableCell>{person.fname}</TableCell>
                       <TableCell>{person.lname}</TableCell>
                       <TableCell>{person.sbn}</TableCell>
-                      <TableCell>
-                        <Stack direction={"row"} spacing={2}>
+                      <TableCell width={1}>
+                        <Stack
+                          direction={"row"}
+                          spacing={2}
+                          justifyContent={"center"}
+                        >
                           <Button
                             variant="outlined"
                             color="success"
@@ -142,9 +147,9 @@ function DisplayDeleted() {
                             color="error"
                             disableElevation
                             startIcon={<DeleteForeverIcon />}
-                            onClick={()=>{
+                            onClick={() => {
                               handleOpenDialog();
-                              setSbn(person.sbn)
+                              setSbn(person.sbn);
                             }}
                           >
                             Delete

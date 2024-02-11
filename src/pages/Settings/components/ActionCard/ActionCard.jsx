@@ -1,18 +1,31 @@
-import { Button, IconButton, Paper, Stack, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 function ActionCard(props) {
   return (
-    <Paper variant="outlined" sx={{display: 'inline-block', padding: 2, minWidth: 280}}>
-        <Stack direction='row' alignItems='center' ml={-1}>
-          <IconButton>
-            {props.icon}
-          </IconButton>
-          <Typography fontWeight='bold'>{props.title}</Typography>
-        </Stack>
-        <Typography>{props.description}</Typography>
-        <Button variant="contained" color="grey" size="small" sx={{marginTop: 2}} disableElevation>{props.actionTitle}</Button>
-      </Paper>
-  )
+    <Paper
+      variant="outlined"
+      sx={{ display: "inline-block", padding: 2, minWidth: 280 }}
+    >
+      <Stack direction="row" alignItems="center" ml={-1}>
+        <IconButton>{props.icon}</IconButton>
+        <Typography fontWeight="bold">{props.title}</Typography>
+      </Stack>
+      <Typography>{props.description}</Typography>
+      <Button
+        variant="contained"
+        color="grey"
+        size="small"
+        sx={{ marginTop: 2 }}
+        disableElevation
+      >
+        {props.actionTitle}
+      </Button>
+    </Paper>
+  );
 }
 
 export default ActionCard;

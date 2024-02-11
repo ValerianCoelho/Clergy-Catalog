@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { data } from "./constants";
-import db from "../../backend/database";
+import React from "react";
+import { useState, useEffect } from "react";
 import { changeTab, setSbn } from "../../store/index";
 import { connect } from "react-redux";
+import db from "../../backend/database";
 
 import Heading from "../../components/Heading/Heading";
 import DisplayDonations from "./components/DisplayDonations/DisplayDonations";
@@ -23,10 +22,10 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
-import { Button } from "@mui/material";
 
 function View(props) {
   const [open, setOpen] = useState(-1);
