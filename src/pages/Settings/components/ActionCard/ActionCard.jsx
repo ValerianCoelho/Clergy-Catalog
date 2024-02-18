@@ -21,6 +21,7 @@ function ActionCard(props) {
         size="small"
         sx={{ marginTop: 2 }}
         disableElevation
+        onClick={props.handleClick}
       >
         {props.actionTitle}
       </Button>

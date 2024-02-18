@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { scrollToTop } from "../../utils/scrollToTop";
 import ActionCard from "./components/ActionCard/ActionCard";
 import Heading from "../../components/Heading/Heading";
@@ -11,10 +11,27 @@ import BackupTableIcon from "@mui/icons-material/BackupTable";
 import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
+import CreateDialog from "../../components/Dialog/CreateDialog/CreateDialog";
+
 function Settings() {
+  const [createDbDialog, setCreateDbDialog] = useState(false);
+  const [loadDbDialog, setLoadDbDialog] = useState(false);
+  const [importDbDialog, setImportDbDialog] = useState(false);
+  const [exportDbDialog, setExportDbDialog] = useState(false);
+  const [exportCsvDbDialog, setExportCsvDbDialog] = useState(false);
+
   useEffect(() => {
     scrollToTop();
   }, []);
+
+  const handleClose = () => {
+    setCreateDbDialog(false);
+  };
+
+  const handleCreateDB = () => {
+    setCreateDbDialog(true);
+  };
+
   return (
     <>
       <Heading title={"Settings"} />
@@ -25,8 +42,11 @@ function Settings() {
         <ActionCard
           icon={<ExitToAppIcon sx={{ color: "black" }} />}
           title={"Create DB"}
-          description={"Creates a db with the tables required to run the application"}
+          description={
+            "Creates a db with the tables required to run the application"
+          }
           actionTitle={"CREATE DATABASE"}
+          handleClick={handleCreateDB}
         />
         <ActionCard
           icon={<ExitToAppIcon sx={{ color: "black" }} />}
@@ -48,7 +68,9 @@ function Settings() {
         <ActionCard
           icon={<SystemUpdateAltIcon sx={{ color: "black" }} />}
           title={"Export DB"}
-          description={"Export the Database from the root of the application to any folder on the computer"}
+          description={
+            "Export the Database from the root of the application to any folder on the computer"
+          }
           actionTitle={"EXPORT DATABASE"}
         />
         <ActionCard
@@ -60,6 +82,7 @@ function Settings() {
       </Stack>
       <Heading title={"Deleted Records"} />
       <DisplayDeleted />
+      <CreateDialog open={createDbDialog} handleClose={handleClose} />
     </>
   );
 }
