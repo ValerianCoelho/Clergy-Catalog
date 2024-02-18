@@ -19,28 +19,42 @@ function Settings() {
     <>
       <Heading title={"Settings"} />
       <Typography variant="body1" fontWeight={"bold"} mb={1}>
-        IMPORT
+        SETUP
       </Typography>
-      <ActionCard
-        icon={<ExitToAppIcon sx={{ color: "black" }} />}
-        title={"Import DB"}
-        description={"Import data from an existing database"}
-        actionTitle={"IMPORT DATABASE"}
-      />
+      <Stack spacing={2} direction={"row"}>
+        <ActionCard
+          icon={<ExitToAppIcon sx={{ color: "black" }} />}
+          title={"Create DB"}
+          description={"Creates a db with the tables required to run the application"}
+          actionTitle={"CREATE DATABASE"}
+        />
+        <ActionCard
+          icon={<ExitToAppIcon sx={{ color: "black" }} />}
+          title={"Load DB"}
+          description={"Loads the db from the root of the appliation for use"}
+          actionTitle={"LOAD DATABASE"}
+        />
+        <ActionCard
+          icon={<ExitToAppIcon sx={{ color: "black" }} />}
+          title={"Import DB"}
+          description={"Places the db in the root directory of the application"}
+          actionTitle={"IMPORT DATABASE"}
+        />
+      </Stack>
       <Typography variant="body1" fontWeight={"bold"} mb={1} mt={4}>
-        EXPORT
+        BACKUP
       </Typography>
       <Stack spacing={2} direction={"row"}>
         <ActionCard
           icon={<SystemUpdateAltIcon sx={{ color: "black" }} />}
           title={"Export DB"}
-          description={"Export the Database File"}
+          description={"Export the Database from the root of the application to any folder on the computer"}
           actionTitle={"EXPORT DATABASE"}
         />
         <ActionCard
           icon={<BackupTableIcon sx={{ color: "black" }} />}
           title={"EXPORT AS CSV"}
-          description={"Backup the database as a CSV File"}
+          description={"Export the Currently Loaded DB as a CSV File"}
           actionTitle={"EXPORT AS CSV FILE"}
         />
       </Stack>

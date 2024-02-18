@@ -8,7 +8,7 @@ function ActionCard(props) {
   return (
     <Paper
       variant="outlined"
-      sx={{ display: "inline-block", padding: 2, minWidth: 280 }}
+      sx={{ display: "inline-block", padding: 2, width: 300 }}
     >
       <Stack direction="row" alignItems="center" ml={-1}>
         <IconButton>{props.icon}</IconButton>
