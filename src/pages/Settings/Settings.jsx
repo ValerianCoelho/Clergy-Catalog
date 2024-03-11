@@ -1,17 +1,7 @@
 import { useEffect, useState } from "react";
 import { scrollToTop } from "../../utils/scrollToTop";
-import ActionCard from "./components/ActionCard/ActionCard";
 import Heading from "../../components/Heading/Heading";
 import DisplayDeleted from "./components/DisplayDeleted/DisplayDeleted";
-
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-
-import BackupTableIcon from "@mui/icons-material/BackupTable";
-import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-
-import CreateDialog from "../../components/Dialog/CreateDialog/CreateDialog";
 
 import Database from "./components/Database/Database";
 

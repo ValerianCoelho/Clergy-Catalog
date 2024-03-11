@@ -3,38 +3,77 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useState } from "react";
 import {
   Box,
   Button,
+  Dialog,
   Divider,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
   Paper,
+  Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import MoreVert from "@mui/icons-material/MoreVert";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-const options = [
-  "Set Active",
-  "Export (CSV)",
-  "Export DB File",
-  "Delete Database",
-];
 
 const databases = ["Database 1", "Database 2", "Database 3"];
 
 function Database() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const openMenu = Boolean(anchorEl);
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleCloseDialog = ()=> {
+    setOpenDialog(false)
+  }
+  const handleOpenDialog = ()=> {
+    setOpenDialog(true)
+  }
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  const handleCreateDatabase = () => {
+    console.log("Create Database");
+    handleCloseDialog();
+  }
+  const handleImportDatabase = () => {
+    console.log("Import Database");
+  }
+  const setAsActive = () => {
+    console.log("Set as Active");
+    handleCloseMenu();
+  }
+  const exportCsvDb = () => {
+    console.log('Export CSV');
+    handleCloseMenu();
+  }
+  const exportDbFile = () => {
+    console.log('Export DB File');
+    handleCloseMenu();
+  }
+  const deleteDatabase = () => {
+    console.log('Delete Database');
+    handleCloseMenu();
+  }
+
+  const options = [
+    {option: "Set Active", action: setAsActive},
+    {option: "Export (CSV)", action: exportCsvDb},
+    {option: "Export DB File", action: exportDbFile},
+    {option: "Delete Database", action: deleteDatabase},
+  ];
+  
+
 
   return (
     <div>
@@ -58,19 +97,50 @@ function Database() {
             );
           })}
         </Box>
-        <Box p={1}>
-          <Button variant="text" startIcon={<AddIcon />} fullWidth={true} disableElevation>
+        <Stack direction={'row'} p={1} spacing={1}>
+          <Button variant="text" startIcon={<AddIcon />} fullWidth={true} disableElevation onClick={handleOpenDialog}>
             Create New
           </Button>
-        </Box>
+          <Button variant="text" startIcon={<ExitToAppIcon />} fullWidth={true} disableElevation onClick={handleImportDatabase}>
+            Import DB
+          </Button>
+        </Stack>
       </Paper>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        {options.map((option) => (
-          <MenuItem key={option} onClick={handleClose}>
+      <Menu anchorEl={anchorEl} open={openMenu} onClose={handleCloseMenu}>
+        {Object.values(options).map(({option, action}) => (
+          <MenuItem key={option} onClick={action}>
             {option}
           </MenuItem>
         ))}
       </Menu>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <Stack p={3} spacing={2} width={300}>
+          <Typography variant="h6">Create Database</Typography>
+          <TextField type={"text"} label={"Database Name"} size="medium" />
+          <Stack direction={"row"} spacing={1}>
+            <Button
+              onClick={handleCloseDialog}
+              variant="contained"
+              autoFocus
+              disableElevation
+              fullWidth={true}
+              size="medium"
+            >
+              Close
+            </Button>
+            <Button
+              onClick={handleCreateDatabase}
+              variant="contained"
+              autoFocus
+              disableElevation
+              fullWidth={true}
+              size="medium"
+            >
+              Create
+            </Button>
+          </Stack>
+        </Stack>
+      </Dialog>
     </div>
   );
 }
