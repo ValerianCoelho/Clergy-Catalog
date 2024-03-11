@@ -124,7 +124,7 @@ function View(props) {
                         backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
                       }}
                     >
-                      <TableCell>
+                      <TableCell sx={{padding: 1}}>
                         <IconButton
                           onClick={() => {
                             setOpen(open === index ? -1 : index);

@@ -39,7 +39,7 @@ function Database() {
   return (
     <div>
       <Paper sx={{overflow: 'hidden'}}>
-        <Typography variant="h6" p={1} sx={{ backgroundColor: 'black', color: 'white' }}>
+        <Typography variant="body1" fontWeight={'bold'} p={2} sx={{ backgroundColor: 'black', color: 'white' }}>
           Databases
         </Typography>
         <Divider />
