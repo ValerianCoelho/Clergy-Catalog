@@ -20,8 +20,9 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import MoreVert from "@mui/icons-material/MoreVert";
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { open } from "@tauri-apps/api/dialog";
+import { readDir, BaseDirectory, renameFile } from "@tauri-apps/api/fs";
 
 const databases = ["Database 1", "Database 2", "Database 3"];
 
@@ -29,12 +30,12 @@ function Database() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenu = Boolean(anchorEl);
   const [openDialog, setOpenDialog] = useState(false);
-  const handleCloseDialog = ()=> {
-    setOpenDialog(false)
-  }
-  const handleOpenDialog = ()=> {
-    setOpenDialog(true)
-  }
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -45,40 +46,59 @@ function Database() {
   const handleCreateDatabase = () => {
     console.log("Create Database");
     handleCloseDialog();
-  }
-  const handleImportDatabase = () => {
+  };
+  const handleImportDatabase = async () => {
     console.log("Import Database");
-  }
+    try {
+      const folderLocations = await open({
+        multiple: false,
+        directory: true,
+      });
+      const folderLocation = Array.isArray(folderLocations)
+        ? folderLocations[0]
+        : folderLocations;
+
+      if (folderLocation) {
+        const entries = await readDir(folderLocation, { recursive: true });
+        processEntries(entries);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const setAsActive = () => {
     console.log("Set as Active");
     handleCloseMenu();
-  }
+  };
   const exportCsvDb = () => {
-    console.log('Export CSV');
+    console.log("Export CSV");
     handleCloseMenu();
-  }
+  };
   const exportDbFile = () => {
-    console.log('Export DB File');
+    console.log("Export DB File");
     handleCloseMenu();
-  }
+  };
   const deleteDatabase = () => {
-    console.log('Delete Database');
+    console.log("Delete Database");
     handleCloseMenu();
-  }
+  };
 
   const options = [
-    {option: "Set Active", action: setAsActive},
-    {option: "Export (CSV)", action: exportCsvDb},
-    {option: "Export DB File", action: exportDbFile},
-    {option: "Delete Database", action: deleteDatabase},
+    { option: "Set Active", action: setAsActive },
+    { option: "Export (CSV)", action: exportCsvDb },
+    { option: "Export DB File", action: exportDbFile },
+    { option: "Delete Database", action: deleteDatabase },
   ];
-  
-
 
   return (
     <div>
-      <Paper sx={{overflow: 'hidden'}}>
-        <Typography variant="body1" fontWeight={'bold'} p={2} sx={{ backgroundColor: 'black', color: 'white' }}>
+      <Paper sx={{ overflow: "hidden" }}>
+        <Typography
+          variant="body1"
+          fontWeight={"bold"}
+          p={2}
+          sx={{ backgroundColor: "black", color: "white" }}
+        >
           Databases
         </Typography>
         <Divider />
@@ -97,17 +117,29 @@ function Database() {
             );
           })}
         </Box>
-        <Stack direction={'row'} p={1} spacing={1}>
-          <Button variant="text" startIcon={<AddIcon />} fullWidth={true} disableElevation onClick={handleOpenDialog}>
+        <Stack direction={"row"} p={1} spacing={1}>
+          <Button
+            variant="text"
+            startIcon={<AddIcon />}
+            fullWidth={true}
+            disableElevation
+            onClick={handleOpenDialog}
+          >
             Create New
           </Button>
-          <Button variant="text" startIcon={<ExitToAppIcon />} fullWidth={true} disableElevation onClick={handleImportDatabase}>
+          <Button
+            variant="text"
+            startIcon={<ExitToAppIcon />}
+            fullWidth={true}
+            disableElevation
+            onClick={handleImportDatabase}
+          >
             Import DB
           </Button>
         </Stack>
       </Paper>
       <Menu anchorEl={anchorEl} open={openMenu} onClose={handleCloseMenu}>
-        {Object.values(options).map(({option, action}) => (
+        {Object.values(options).map(({ option, action }) => (
           <MenuItem key={option} onClick={action}>
             {option}
           </MenuItem>
