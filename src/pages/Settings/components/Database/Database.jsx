@@ -21,7 +21,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { open } from "@tauri-apps/api/dialog";
-import { readDir, BaseDirectory, writeTextFile } from "@tauri-apps/api/fs";
+import { readDir, BaseDirectory, writeTextFile, readTextFile } from "@tauri-apps/api/fs";
 
 const databases = ["Database 1", "Database 2", "Database 3"];
 
@@ -29,8 +29,11 @@ function Database() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenu = Boolean(anchorEl);
   const [openDialog, setOpenDialog] = useState(false);
+  const [dbName, setDbName] = React.useState("");
+
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setDbName("");
   };
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -43,9 +46,7 @@ function Database() {
   };
 
   const handleCreateDatabase = async () => {
-    // Write a text file to the `$APPCONFIG/app.conf` path
-    const content = `{"databases": ["Database 1", "Database 2", "Database 3"]}`
-    await writeTextFile("databases.json", content, {
+    await writeTextFile("active.txt", dbName, {
       dir: BaseDirectory.AppConfig,
     });
     handleCloseDialog();
@@ -108,7 +109,7 @@ function Database() {
         <Box px={0}>
           {databases.map((database, index) => {
             return (
-              <List disablePadding>
+              <List disablePadding key={index}>
                 <ListItem>
                   <ListItemText>{database}</ListItemText>
                   <IconButton onClick={handleClick}>
@@ -151,7 +152,7 @@ function Database() {
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <Stack p={3} spacing={2} width={300}>
           <Typography variant="h6">Create Database</Typography>
-          <TextField type={"text"} label={"Database Name"} size="medium" />
+          <TextField type={"text"} label={"Database Name"} size="medium" onChange={(e)=>{setDbName(e.target.value)}}/>
           <Stack direction={"row"} spacing={1}>
             <Button
               onClick={handleCloseDialog}

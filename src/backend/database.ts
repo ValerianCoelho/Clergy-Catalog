@@ -1,7 +1,10 @@
 import Database from "tauri-plugin-sql-api";
+import { BaseDirectory, readTextFile } from "@tauri-apps/api/fs";
 
 // sqlite. The path is relative to `tauri::api::path::BaseDirectory::App`.
-const db = await Database.load("sqlite:test.db");
+const db_name = await readTextFile('active.txt', { dir: BaseDirectory.AppConfig });
+const db = await Database.load(`sqlite:${db_name}.db`);
+
 
 db.execute(`
   CREATE TABLE IF NOT EXISTS person (
