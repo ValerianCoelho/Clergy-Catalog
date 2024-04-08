@@ -26,6 +26,7 @@ import {
   BaseDirectory,
   writeTextFile,
   readTextFile,
+  removeFile
 } from "@tauri-apps/api/fs";
 
 function Database() {
@@ -116,8 +117,9 @@ function Database() {
     console.log("Export DB File");
     handleCloseMenu();
   };
-  const deleteDatabase = () => {
-    console.log("Delete Database");
+  const deleteDatabase = async () => {
+    console.log(`${selectedDb}.db`)
+    await removeFile(`${selectedDb}.db`, { dir: BaseDirectory.AppConfig });
     handleCloseMenu();
   };
 
