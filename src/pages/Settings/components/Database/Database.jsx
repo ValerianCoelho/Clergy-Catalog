@@ -30,10 +30,24 @@ import {
 
 function Database() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const openMenu = Boolean(anchorEl);
   const [openDialog, setOpenDialog] = useState(false);
+
+  const openMenu = Boolean(anchorEl);
+
   const [dbName, setDbName] = React.useState("");
   const [databases, setDatabases] = React.useState([]);
+  const [selectedDb, setSelectedDb] = React.useState("");
+  const [activeDb, setActiveDb] = React.useState("");
+
+  React.useEffect(() => {
+    async function getActiveDb() {
+      const activeDb = await readTextFile("active.txt", {
+        dir: BaseDirectory.AppConfig,
+      });
+      setActiveDb(activeDb);
+    }
+    getActiveDb();
+  }, []);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -42,7 +56,8 @@ function Database() {
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
-  const handleClick = (event) => {
+  const handleClick = (event, dbName) => {
+    setSelectedDb(dbName);
     setAnchorEl(event.currentTarget);
   };
   const handleCloseMenu = () => {
@@ -56,7 +71,7 @@ function Database() {
         recursive: true,
       });
       dbs = dbs.filter((db) => db.name.endsWith(".db"));
-      dbs = dbs.map((db) => db.name);
+      dbs = dbs.map((db) => db.name.replace(".db", ""));
       setDatabases(dbs);
     }
     fetchDatabases();
@@ -87,8 +102,10 @@ function Database() {
       console.log(error);
     }
   };
-  const setAsActive = () => {
-    console.log("Set as Active");
+  const setAsActive = async () => {
+    await writeTextFile("active.txt", selectedDb, {
+      dir: BaseDirectory.AppConfig,
+    });
     handleCloseMenu();
   };
   const exportCsvDb = () => {
@@ -128,8 +145,19 @@ function Database() {
             return (
               <List disablePadding key={index}>
                 <ListItem>
-                  <ListItemText>{database}</ListItemText>
-                  <IconButton onClick={handleClick}>
+                  <ListItemText>
+                    {database}{" "}
+                    <Typography
+                      sx={{ color: "#20c72e", display: "inline-block" }}
+                    >
+                      {database === activeDb && "(active)"}
+                    </Typography>
+                  </ListItemText>
+                  <IconButton
+                    onClick={(e) => {
+                      handleClick(e, database);
+                    }}
+                  >
                     <MoreVertIcon />
                   </IconButton>
                 </ListItem>
