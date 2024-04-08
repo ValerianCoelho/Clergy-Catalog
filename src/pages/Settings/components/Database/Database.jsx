@@ -21,15 +21,19 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { open } from "@tauri-apps/api/dialog";
-import { readDir, BaseDirectory, writeTextFile, readTextFile } from "@tauri-apps/api/fs";
-
-const databases = ["Database 1", "Database 2", "Database 3"];
+import {
+  readDir,
+  BaseDirectory,
+  writeTextFile,
+  readTextFile,
+} from "@tauri-apps/api/fs";
 
 function Database() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenu = Boolean(anchorEl);
   const [openDialog, setOpenDialog] = useState(false);
   const [dbName, setDbName] = React.useState("");
+  const [databases, setDatabases] = React.useState([]);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -44,6 +48,19 @@ function Database() {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  React.useEffect(() => {
+    async function fetchDatabases() {
+      let dbs = await readDir("", {
+        dir: BaseDirectory.AppData,
+        recursive: true,
+      });
+      dbs = dbs.filter((db) => db.name.endsWith(".db"));
+      dbs = dbs.map((db) => db.name);
+      setDatabases(dbs);
+    }
+    fetchDatabases();
+  }, []);
 
   const handleCreateDatabase = async () => {
     await writeTextFile("active.txt", dbName, {
@@ -152,7 +169,14 @@ function Database() {
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <Stack p={3} spacing={2} width={300}>
           <Typography variant="h6">Create Database</Typography>
-          <TextField type={"text"} label={"Database Name"} size="medium" onChange={(e)=>{setDbName(e.target.value)}}/>
+          <TextField
+            type={"text"}
+            label={"Database Name"}
+            size="medium"
+            onChange={(e) => {
+              setDbName(e.target.value);
+            }}
+          />
           <Stack direction={"row"} spacing={1}>
             <Button
               onClick={handleCloseDialog}
