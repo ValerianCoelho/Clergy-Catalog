@@ -83,6 +83,7 @@ function Database() {
       dir: BaseDirectory.AppConfig,
     });
     handleCloseDialog();
+    location.reload(true);
   };
   const handleImportDatabase = async () => {
     console.log("Import Database");
@@ -108,6 +109,7 @@ function Database() {
       dir: BaseDirectory.AppConfig,
     });
     handleCloseMenu();
+    location.reload(true);
   };
   const exportCsvDb = () => {
     console.log("Export CSV");
@@ -120,7 +122,10 @@ function Database() {
   const deleteDatabase = async () => {
     console.log(`${selectedDb}.db`)
     await removeFile(`${selectedDb}.db`, { dir: BaseDirectory.AppConfig });
+    await removeFile(`${selectedDb}.db-shm`, { dir: BaseDirectory.AppConfig });
+    await removeFile(`${selectedDb}.db-wal`, { dir: BaseDirectory.AppConfig });
     handleCloseMenu();
+    location.reload(true);
   };
 
   const options = [
