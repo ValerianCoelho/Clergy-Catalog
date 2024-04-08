@@ -19,10 +19,9 @@ import {
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import MoreVert from "@mui/icons-material/MoreVert";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { open } from "@tauri-apps/api/dialog";
-import { readDir, BaseDirectory, renameFile } from "@tauri-apps/api/fs";
+import { readDir, BaseDirectory, writeTextFile } from "@tauri-apps/api/fs";
 
 const databases = ["Database 1", "Database 2", "Database 3"];
 
@@ -43,8 +42,12 @@ function Database() {
     setAnchorEl(null);
   };
 
-  const handleCreateDatabase = () => {
-    console.log("Create Database");
+  const handleCreateDatabase = async () => {
+    // Write a text file to the `$APPCONFIG/app.conf` path
+    const content = `{"databases": ["Database 1", "Database 2", "Database 3"]}`
+    await writeTextFile("databases.json", content, {
+      dir: BaseDirectory.AppConfig,
+    });
     handleCloseDialog();
   };
   const handleImportDatabase = async () => {
