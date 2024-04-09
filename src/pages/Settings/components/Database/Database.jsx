@@ -4,6 +4,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
+import Database from "tauri-plugin-sql-api";
+import db from "../../../../backend/database";
+import { reload } from "./utils";
 import {
   Box,
   Button,
@@ -29,9 +32,10 @@ import {
   removeFile,
   copyFile,
 } from "@tauri-apps/api/fs";
-import { exportToCsv } from "./utils";
+import { convertToCsv, exportToCsv } from "./utils";
+import { fetchDetails } from "../../../View/utils";
 
-function Database() {
+function DatabaseTable() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -85,7 +89,7 @@ function Database() {
       dir: BaseDirectory.AppConfig,
     });
     handleCloseDialog();
-    location.reload(true);
+    reload(db);
   };
   const handleImportDatabase = async () => {
     try {
@@ -103,7 +107,7 @@ function Database() {
       await writeTextFile("active.txt", destination.split(".")[0], {
         dir: BaseDirectory.AppConfig,
       });
-      location.reload(true);
+      reload(db);
     } catch (error) {
       console.log(error);
     }
@@ -113,16 +117,14 @@ function Database() {
       dir: BaseDirectory.AppConfig,
     });
     handleCloseMenu();
-    location.reload(true);
+    reload(db);
   };
-  const exportCsvDb = () => {
-    const data = [
-      ["Name", "Age", "Country"],
-      ["John", 30, "USA"],
-      ["Alice", 25, "Canada"],
-      ["Bob", 35, "UK"],
-    ];
-    exportToCsv("example.csv", data);
+  const exportCsvDb = async () => {
+    const csvDb = await Database.load(`sqlite:${selectedDb}.db`);
+    fetchDetails(csvDb).then(async (details) => {
+      exportToCsv(`${selectedDb}.csv`, convertToCsv(details));
+      await csvDb.close();
+    });
     handleCloseMenu();
   };
   const exportDbFile = async () => {
@@ -141,12 +143,15 @@ function Database() {
     handleCloseMenu();
   };
   const deleteDatabase = async () => {
-    console.log(`${selectedDb}.db`);
-    await removeFile(`${selectedDb}.db`, { dir: BaseDirectory.AppConfig });
-    await removeFile(`${selectedDb}.db-shm`, { dir: BaseDirectory.AppConfig });
-    await removeFile(`${selectedDb}.db-wal`, { dir: BaseDirectory.AppConfig });
+    try {
+      await removeFile(`${selectedDb}.db`, { dir: BaseDirectory.AppConfig });
+      await removeFile(`${selectedDb}.db-shm`, { dir: BaseDirectory.AppConfig });
+      await removeFile(`${selectedDb}.db-wal`, { dir: BaseDirectory.AppConfig });
+    } catch (error) {
+      console.log(error);
+    }
     handleCloseMenu();
-    location.reload(true);
+    reload(db);
   };
 
   const options = [
@@ -261,4 +266,4 @@ function Database() {
   );
 }
 
-export default Database;
+export default DatabaseTable;

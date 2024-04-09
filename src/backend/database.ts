@@ -36,8 +36,7 @@ try {
     date TEXT,
     receipt TEXT
   );
-`);
-
+  `);
 } catch (error) {
   console.error(error);
 }

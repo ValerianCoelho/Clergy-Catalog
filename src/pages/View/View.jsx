@@ -4,6 +4,7 @@ import { changeTab, setSbn } from "../../store/index";
 import { connect } from "react-redux";
 import { scrollToTop } from "../../utils/scrollToTop";
 import { fetchDetails } from "./utils";
+import db from "../../backend/database";
 
 import Heading from "../../components/Heading/Heading";
 import DisplayDonations from "./components/DisplayDonations/DisplayDonations";
@@ -35,7 +36,9 @@ function View(props) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchDetails().then((details) => { setData(details) });
+    fetchDetails(db).then((details) => {
+      setData(details);
+    });
     scrollToTop();
   }, []);
 
@@ -99,7 +102,7 @@ function View(props) {
                         backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
                       }}
                     >
-                      <TableCell sx={{padding: 1}}>
+                      <TableCell sx={{ padding: 1 }}>
                         <IconButton
                           onClick={() => {
                             setOpen(open === index ? -1 : index);

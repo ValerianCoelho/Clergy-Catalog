@@ -1,6 +1,4 @@
-import db from "../../backend/database";
-
-export async function fetchDetails() {
+export async function fetchDetails(db) {
   try {
     const people = await db.select("SELECT * FROM person ORDER BY fname ASC");
 
