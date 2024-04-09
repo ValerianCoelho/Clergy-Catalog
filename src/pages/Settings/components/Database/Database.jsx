@@ -29,6 +29,7 @@ import {
   removeFile,
   copyFile,
 } from "@tauri-apps/api/fs";
+import { exportToCsv } from "./utils";
 
 function Database() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -97,9 +98,9 @@ function Database() {
           },
         ],
       });
-      const destination = source.split('\\').pop();
+      const destination = source.split("\\").pop();
       await copyFile(source, destination, { dir: BaseDirectory.AppConfig });
-      await writeTextFile("active.txt", destination.split('.')[0], {
+      await writeTextFile("active.txt", destination.split(".")[0], {
         dir: BaseDirectory.AppConfig,
       });
       location.reload(true);
@@ -115,7 +116,13 @@ function Database() {
     location.reload(true);
   };
   const exportCsvDb = () => {
-    console.log("Export CSV");
+    const data = [
+      ["Name", "Age", "Country"],
+      ["John", 30, "USA"],
+      ["Alice", 25, "Canada"],
+      ["Bob", 35, "UK"],
+    ];
+    exportToCsv("example.csv", data);
     handleCloseMenu();
   };
   const exportDbFile = async () => {
