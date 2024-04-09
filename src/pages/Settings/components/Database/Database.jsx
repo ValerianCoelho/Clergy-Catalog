@@ -38,6 +38,7 @@ import { fetchDetails } from "../../../View/utils";
 function DatabaseTable() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const openMenu = Boolean(anchorEl);
 
@@ -143,10 +144,19 @@ function DatabaseTable() {
     handleCloseMenu();
   };
   const deleteDatabase = async () => {
+    if(activeDb === selectedDb) {
+      setOpenDeleteDialog(true);
+      handleCloseMenu();
+      return;
+    }
     try {
       await removeFile(`${selectedDb}.db`, { dir: BaseDirectory.AppConfig });
-      await removeFile(`${selectedDb}.db-shm`, { dir: BaseDirectory.AppConfig });
-      await removeFile(`${selectedDb}.db-wal`, { dir: BaseDirectory.AppConfig });
+      await removeFile(`${selectedDb}.db-shm`, {
+        dir: BaseDirectory.AppConfig,
+      });
+      await removeFile(`${selectedDb}.db-wal`, {
+        dir: BaseDirectory.AppConfig,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -260,6 +270,23 @@ function DatabaseTable() {
               Create
             </Button>
           </Stack>
+        </Stack>
+      </Dialog>
+      <Dialog open={openDeleteDialog} onClose={()=>{setOpenDeleteDialog(false)}}>
+        <Stack p={3} spacing={2} width={300}>
+          <Typography variant="h6">
+          Active databases cannot be deleted
+          </Typography>
+          <Button
+            onClick={()=>{setOpenDeleteDialog(false)}}
+            variant="contained"
+            autoFocus
+            disableElevation
+            fullWidth={true}
+            size="medium"
+          >
+            Okay
+          </Button>
         </Stack>
       </Dialog>
     </div>
