@@ -303,7 +303,7 @@ function Edit(props) {
         }
       />
       <Grid container spacing={2}>
-        {inputStructure.user.map(({ id, label, type }) => (
+        {inputStructure.user.map(({ id, label, type, required }) => (
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={id}>
             <TextField
               id={id}
@@ -316,6 +316,7 @@ function Edit(props) {
               }}
               value={formData[id]}
               error={errorInput === id ? true : false}
+              required={required}
             />
           </Grid>
         ))}
