@@ -2,11 +2,13 @@ import Database from "tauri-plugin-sql-api";
 import { BaseDirectory, readTextFile } from "@tauri-apps/api/fs";
 
 // sqlite. The path is relative to `tauri::api::path::BaseDirectory::App`.
-const db_name = await readTextFile('active.txt', { dir: BaseDirectory.AppConfig });
-const db = await Database.load(`sqlite:${db_name}.db`);
-
-
-db.execute(`
+let db;
+try {
+  const db_name = await readTextFile("active.txt", {
+    dir: BaseDirectory.AppConfig,
+  });
+  db = await Database.load(`sqlite:${db_name}.db`);
+  db.execute(`
   CREATE TABLE IF NOT EXISTS person (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     fname TEXT,
@@ -24,7 +26,7 @@ db.execute(`
   );
 `);
 
-db.execute(`
+  db.execute(`
   CREATE TABLE IF NOT EXISTS donation (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sbn INTEGER,
@@ -35,5 +37,9 @@ db.execute(`
     receipt TEXT
   );
 `);
+
+} catch (error) {
+  console.error(error);
+}
 
 export default db;

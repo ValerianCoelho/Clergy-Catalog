@@ -99,6 +99,9 @@ function Database() {
       });
       const destination = source.split('\\').pop();
       await copyFile(source, destination, { dir: BaseDirectory.AppConfig });
+      await writeTextFile("active.txt", destination.split('.')[0], {
+        dir: BaseDirectory.AppConfig,
+      });
       location.reload(true);
     } catch (error) {
       console.log(error);
