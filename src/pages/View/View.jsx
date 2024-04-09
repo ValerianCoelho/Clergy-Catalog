@@ -2,8 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { changeTab, setSbn } from "../../store/index";
 import { connect } from "react-redux";
-import db from "../../backend/database";
 import { scrollToTop } from "../../utils/scrollToTop";
+import { fetchDetails } from "./utils";
 
 import Heading from "../../components/Heading/Heading";
 import DisplayDonations from "./components/DisplayDonations/DisplayDonations";
@@ -35,34 +35,9 @@ function View(props) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchDetails();
+    fetchDetails().then((details) => { setData(details) });
     scrollToTop();
   }, []);
-
-  async function fetchDetails() {
-    try {
-      const people = await db.select("SELECT * FROM person ORDER BY fname ASC");
-
-      // Create an array of promises for fetching donations
-      const donationPromises = people.map((person) =>
-        db.select(`SELECT * FROM donation WHERE sbn=${person.sbn}`)
-      );
-
-      // Wait for all donation promises to resolve
-      const donationsList = await Promise.all(donationPromises);
-
-      // Combine person and donation data
-      const details = people.map((person, index) => ({
-        ...person,
-        donations: donationsList[index],
-      }));
-      // console.log("Hello", details)
-
-      setData(details);
-    } catch (error) {
-      console.error("Error fetching details:", error);
-    }
-  }
 
   return (
     <>
