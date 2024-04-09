@@ -88,7 +88,7 @@ function Database() {
   };
   const handleImportDatabase = async () => {
     try {
-      const selected = await open({
+      const source = await open({
         multiple: false,
         filters: [
           {
@@ -97,8 +97,8 @@ function Database() {
           },
         ],
       });
-      const filename = selected.split('\\').pop();
-      await copyFile(selected, filename, { dir: BaseDirectory.AppConfig });
+      const destination = source.split('\\').pop();
+      await copyFile(source, destination, { dir: BaseDirectory.AppConfig });
       location.reload(true);
     } catch (error) {
       console.log(error);
@@ -116,8 +116,18 @@ function Database() {
     handleCloseMenu();
   };
   const exportDbFile = async () => {
-    console.log("Export DB File");
-    await copyFile("app.conf", "app.conf.bk", { dir: BaseDirectory.AppConfig });
+    try {
+      const selected = await open({
+        multiple: false,
+        directory: true,
+      });
+      // console.log(selected, selectedDb);
+      const source = `${selectedDb}.db`;
+      const destination = `${selected}\\${selectedDb}.db`;
+      await copyFile(source, destination, { dir: BaseDirectory.AppConfig });
+    } catch (error) {
+      console.log(error);
+    }
     handleCloseMenu();
   };
   const deleteDatabase = async () => {
