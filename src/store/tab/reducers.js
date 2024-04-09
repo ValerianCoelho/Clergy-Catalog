@@ -1,7 +1,7 @@
 import { CHANGE_TAB } from "./actions";
 
 const initialState = {
-  tab: 'view'
+  tab: localStorage.getItem("tab") || "view"
 }
 
 const tabReducer = (state = initialState, action)=> {
