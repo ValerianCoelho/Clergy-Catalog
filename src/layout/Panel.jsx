@@ -63,6 +63,7 @@ function Panel(props) {
                 props.changeTab(tab);
                 localStorage.setItem("tab", tab);
               }}
+              selected={props.tab === tab}
             >
               <ListItem>
                 <ListItemIcon sx={{ minWidth: 0 }}>
