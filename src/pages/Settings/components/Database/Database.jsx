@@ -26,7 +26,8 @@ import {
   BaseDirectory,
   writeTextFile,
   readTextFile,
-  removeFile
+  removeFile,
+  copyFile,
 } from "@tauri-apps/api/fs";
 
 function Database() {
@@ -86,20 +87,19 @@ function Database() {
     location.reload(true);
   };
   const handleImportDatabase = async () => {
-    console.log("Import Database");
     try {
-      const folderLocations = await open({
+      const selected = await open({
         multiple: false,
-        directory: true,
+        filters: [
+          {
+            name: "Database",
+            extensions: ["db"],
+          },
+        ],
       });
-      const folderLocation = Array.isArray(folderLocations)
-        ? folderLocations[0]
-        : folderLocations;
-
-      if (folderLocation) {
-        const entries = await readDir(folderLocation, { recursive: true });
-        processEntries(entries);
-      }
+      const filename = selected.split('\\').pop();
+      await copyFile(selected, filename, { dir: BaseDirectory.AppConfig });
+      location.reload(true);
     } catch (error) {
       console.log(error);
     }
@@ -115,12 +115,13 @@ function Database() {
     console.log("Export CSV");
     handleCloseMenu();
   };
-  const exportDbFile = () => {
+  const exportDbFile = async () => {
     console.log("Export DB File");
+    await copyFile("app.conf", "app.conf.bk", { dir: BaseDirectory.AppConfig });
     handleCloseMenu();
   };
   const deleteDatabase = async () => {
-    console.log(`${selectedDb}.db`)
+    console.log(`${selectedDb}.db`);
     await removeFile(`${selectedDb}.db`, { dir: BaseDirectory.AppConfig });
     await removeFile(`${selectedDb}.db-shm`, { dir: BaseDirectory.AppConfig });
     await removeFile(`${selectedDb}.db-wal`, { dir: BaseDirectory.AppConfig });
