@@ -17,6 +17,7 @@ import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 function DisplayDeleted() {
+  let count = 0;
   const [data, setData] = useState([]);
   const [sbn, setSbn] = useState(-1);
   const [restored, setRestored] = useState(true);
@@ -114,14 +115,19 @@ function DisplayDeleted() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map(
-              (person, index) =>
-                person.isDeleted !== "false" && (
+            {data.map((person, index) => {
+              // display only if searchKey is found in searchAttribute and the record is not deleted
+              // searchkey is the value in the search box
+              // searchAttribute is the attribute selected in the dropdown
+              const displayRecord = person.isDeleted !== "false";
+              count = displayRecord ? count + 1 : count;
+              return (
+                displayRecord && (
                   <React.Fragment key={index}>
                     <TableRow
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
-                        backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
+                        backgroundColor: count % 2 === 1 ? "#f4f4f4" : "white",
                       }}
                     >
                       <TableCell>{person.fname}</TableCell>
@@ -159,7 +165,8 @@ function DisplayDeleted() {
                     </TableRow>
                   </React.Fragment>
                 )
-            )}
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

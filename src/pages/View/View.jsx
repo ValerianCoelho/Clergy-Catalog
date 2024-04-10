@@ -30,6 +30,8 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
 
 function View(props) {
+  let count = 0;
+
   const [open, setOpen] = useState(-1);
   const [searchAttribute, setSearchAttribute] = useState("fname");
   const [searchKey, setSearchKey] = useState("");
@@ -84,22 +86,23 @@ function View(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map(
-              (person, index) =>
-                (typeof person[searchAttribute] === "number"
-                  ? person[searchAttribute]
-                      .toString()
-                      .toLowerCase()
-                      .includes(searchKey)
-                  : person[searchAttribute]
-                      .toLowerCase()
-                      .includes(searchKey)) &&
-                person.isDeleted === "false" && (
+            {data.map((person, index) => {
+              // display only if searchKey is found in searchAttribute and the record is not deleted
+              // searchkey is the value in the search box
+              // searchAttribute is the attribute selected in the dropdown
+              const displayRecord =
+                typeof person[searchAttribute] === "number"
+                  ? person[searchAttribute].toString().includes(searchKey)
+                  : person[searchAttribute].toLowerCase().includes(searchKey) &&
+                    person.isDeleted === "false";
+              count = displayRecord ? count + 1 : count;
+              return (
+                displayRecord && (
                   <React.Fragment key={index}>
                     <TableRow
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
-                        backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
+                        backgroundColor: count % 2 === 1 ? "#f4f4f4" : "white",
                       }}
                     >
                       <TableCell sx={{ padding: 1 }}>
@@ -165,7 +168,8 @@ function View(props) {
                     </TableRow>
                   </React.Fragment>
                 )
-            )}
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
