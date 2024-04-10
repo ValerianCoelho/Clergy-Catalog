@@ -99,7 +99,6 @@ function DisplayDeleted() {
   return (
     <>
       <SearchRecords
-      title={"Search Deleted Records"}
         setSearchAttribute={setSearchAttribute}
         setSearchKey={setSearchKey}
         searchAttribute={searchAttribute}
@@ -134,7 +133,7 @@ function DisplayDeleted() {
                 typeof person[searchAttribute] === "number"
                   ? person[searchAttribute].toString().includes(searchKey)
                   : person[searchAttribute].toLowerCase().includes(searchKey) &&
-                    person.isDeleted === "false";
+                    person.isDeleted !== "false";
               count = displayRecord ? count + 1 : count;
               return (
                 displayRecord && (
@@ -186,6 +185,7 @@ function DisplayDeleted() {
         </Table>
       </TableContainer>
       <DialogBox
+      color={"error"}
         title={dialogData.title}
         msg={dialogData.msg}
         open={dialogData.open}

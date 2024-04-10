@@ -32,7 +32,6 @@ import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
 export function SearchRecords(props) {
   return (
     <>
-      <Heading title={props.title} />
       <Stack direction={"row"} pb={3} spacing={2}>
         <TextField
           label={"Search " + props.searchAttribute}
@@ -74,8 +73,8 @@ function View(props) {
 
   return (
     <>
+      <Heading title={"Search Records"} />
       <SearchRecords
-        title={"Search Records"}
         setSearchAttribute={setSearchAttribute}
         setSearchKey={setSearchKey}
         searchAttribute={searchAttribute}
