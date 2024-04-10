@@ -11,6 +11,9 @@ try {
     });
   } catch (error) {
     db_name = "database 1";
+    await writeTextFile("active.txt", db_name, {
+      dir: BaseDirectory.AppConfig,
+    });
   }
   db = await Database.load(`sqlite:${db_name}.db`);
   db.execute(`

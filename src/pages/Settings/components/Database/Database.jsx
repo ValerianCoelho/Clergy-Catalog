@@ -114,6 +114,9 @@ function DatabaseTable() {
     }
   };
   const setAsActive = async () => {
+    if (activeDb === selectedDb) {
+      return;
+    }
     await writeTextFile("active.txt", selectedDb, {
       dir: BaseDirectory.AppConfig,
     });

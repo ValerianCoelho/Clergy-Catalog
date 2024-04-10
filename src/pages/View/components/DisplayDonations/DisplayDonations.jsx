@@ -15,7 +15,7 @@ function DisplayDonations({ donations }) {
             <TableCell sx={{ color: "white" }}>Date</TableCell>
             <TableCell sx={{ color: "white" }}>Amount</TableCell>
             <TableCell sx={{ color: "white" }}>Payment Mode</TableCell>
-            <TableCell sx={{ color: "white" }}>Reciept No</TableCell>
+            <TableCell sx={{ color: "white" }}>Receipt No</TableCell>
             <TableCell sx={{ color: "white" }}>Purpose</TableCell>
           </TableRow>
         </TableHead>
