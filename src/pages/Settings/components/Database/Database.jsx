@@ -121,10 +121,12 @@ function DatabaseTable() {
     reload(db);
   };
   const exportCsvDb = async () => {
-    const csvDb = await Database.load(`sqlite:${selectedDb}.db`);
+    const csvDb = activeDb === selectedDb ? db : await Database.load(`sqlite:${selectedDb}.db`);
     fetchDetails(csvDb).then(async (details) => {
       exportToCsv(`${selectedDb}.csv`, convertToCsv(details));
-      await csvDb.close();
+      if(activeDb != selectedDb) {
+        await csvDb.close();
+      }
     });
     handleCloseMenu();
   };
