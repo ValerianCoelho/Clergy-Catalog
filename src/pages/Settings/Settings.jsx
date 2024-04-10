@@ -20,7 +20,6 @@ function Settings() {
     <>
       <Heading title={"Data Management"} />
       <Database/>
-      <Heading title={"Deleted Records"} />
       <DisplayDeleted />
     </>
   );

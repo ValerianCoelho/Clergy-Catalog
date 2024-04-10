@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import db from "../../../../backend/database";
 import DialogBox from "../../../../components/Dialog/Dialog";
 import { reload } from "../Database/utils";
+import { SearchRecords } from "../../../View/View";
 
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -19,6 +20,8 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 function DisplayDeleted() {
   let count = 0;
+  const [searchAttribute, setSearchAttribute] = useState("fname");
+  const [searchKey, setSearchKey] = useState("");
   const [data, setData] = useState([]);
   const [sbn, setSbn] = useState(-1);
   const [restored, setRestored] = useState(true);
@@ -95,6 +98,12 @@ function DisplayDeleted() {
 
   return (
     <>
+      <SearchRecords
+      title={"Search Deleted Records"}
+        setSearchAttribute={setSearchAttribute}
+        setSearchKey={setSearchKey}
+        searchAttribute={searchAttribute}
+      />
       <TableContainer component={Paper} sx={{ marginBottom: 4 }}>
         <Table>
           <TableHead sx={{ backgroundColor: "black" }}>
@@ -121,7 +130,11 @@ function DisplayDeleted() {
               // display only if searchKey is found in searchAttribute and the record is not deleted
               // searchkey is the value in the search box
               // searchAttribute is the attribute selected in the dropdown
-              const displayRecord = person.isDeleted !== "false";
+              const displayRecord =
+                typeof person[searchAttribute] === "number"
+                  ? person[searchAttribute].toString().includes(searchKey)
+                  : person[searchAttribute].toLowerCase().includes(searchKey) &&
+                    person.isDeleted === "false";
               count = displayRecord ? count + 1 : count;
               return (
                 displayRecord && (

@@ -29,6 +29,34 @@ import Button from "@mui/material/Button";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
 
+export function SearchRecords(props) {
+  return (
+    <>
+      <Heading title={props.title} />
+      <Stack direction={"row"} pb={3} spacing={2}>
+        <TextField
+          label={"Search " + props.searchAttribute}
+          variant="outlined"
+          type="text"
+          fullWidth={true}
+          onChange={(e) => props.setSearchKey(e.target.value.toLowerCase())}
+        />
+        <TextField
+          select
+          label={"Select"}
+          value={props.searchAttribute}
+          sx={{ minWidth: 200 }}
+          onChange={(e) => props.setSearchAttribute(e.target.value)}
+        >
+          <MenuItem value="fname">First Name</MenuItem>
+          <MenuItem value="lname">Last Name</MenuItem>
+          <MenuItem value="sbn">SBN</MenuItem>
+        </TextField>
+      </Stack>
+    </>
+  );
+}
+
 function View(props) {
   let count = 0;
 
@@ -46,27 +74,12 @@ function View(props) {
 
   return (
     <>
-      <Heading title={"Search Records"} />
-      <Stack direction={"row"} pb={3} spacing={2}>
-        <TextField
-          label={"Search " + searchAttribute}
-          variant="outlined"
-          type="text"
-          fullWidth={true}
-          onChange={(e) => setSearchKey(e.target.value.toLowerCase())}
-        />
-        <TextField
-          select
-          label={"Select"}
-          value={searchAttribute}
-          sx={{ minWidth: 200 }}
-          onChange={(e) => setSearchAttribute(e.target.value)}
-        >
-          <MenuItem value="fname">First Name</MenuItem>
-          <MenuItem value="lname">Last Name</MenuItem>
-          <MenuItem value="sbn">SBN</MenuItem>
-        </TextField>
-      </Stack>
+      <SearchRecords
+        title={"Search Records"}
+        setSearchAttribute={setSearchAttribute}
+        setSearchKey={setSearchKey}
+        searchAttribute={searchAttribute}
+      />
       <TableContainer component={Paper}>
         <Table>
           <TableHead sx={{ backgroundColor: "black" }}>
