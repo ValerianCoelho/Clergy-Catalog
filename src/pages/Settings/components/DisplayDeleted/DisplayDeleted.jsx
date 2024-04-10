@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import db from "../../../../backend/database";
 import DialogBox from "../../../../components/Dialog/Dialog";
+import { reload } from "../Database/utils";
 
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -89,6 +90,7 @@ function DisplayDeleted() {
       ...dialogData,
       open: false,
     });
+    reload(db);
   }
 
   return (
