@@ -8,7 +8,7 @@ import Edit from "./Edit/Edit";
 
 function Content(props) {
   return (
-    <Box sx={{ marginLeft: 30, marginRight: 5, marginTop: 4 }}>
+    <Box sx={{ marginLeft: 33, marginRight: 5, marginTop: 4 }}>
       {props.tab === "view" && <View />}
       {props.tab === "add" && <Add />}
       {props.tab === "settings" && <Settings />}

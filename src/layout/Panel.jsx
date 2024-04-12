@@ -13,6 +13,8 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
 import { changeTab } from "../store/index";
 import { connect } from "react-redux";
+import Credits from "./Credits/Credits";
+import { Box, Stack } from "@mui/material";
 
 function Panel(props) {
   const panelData = [
@@ -53,39 +55,47 @@ function Panel(props) {
 
   return (
     <Drawer variant="permanent">
-      <List>
-        {panelData.map(({ primaryText, backgroundColor, icon, tab }, index) => {
-          return (
-            <ListItemButton
-              key={index}
-              sx={{ margin: 0, padding: 0 }}
-              onClick={() => {
-                props.changeTab(tab);
-                localStorage.setItem("tab", tab);
-              }}
-              selected={props.tab === tab}
-            >
-              <ListItem>
-                <ListItemIcon sx={{ minWidth: 0 }}>
-                  <ListItemAvatar sx={{ minWidth: 0 }}>
-                    <Avatar
-                      sx={{
-                        backgroundColor: { backgroundColor },
-                        borderRadius: 2,
-                        width: 32,
-                        height: 32,
-                      }}
-                    >
-                      {icon}
-                    </Avatar>
-                  </ListItemAvatar>
-                </ListItemIcon>
-                <ListItemText primary={primaryText} sx={{ marginLeft: 2 }} />
-              </ListItem>
-            </ListItemButton>
-          );
-        })}
-      </List>
+      <Stack sx={{width: "240px", flex:1 }}>
+        <List sx={{ flex: 1 }}>
+          {panelData.map(
+            ({ primaryText, backgroundColor, icon, tab }, index) => {
+              return (
+                <ListItemButton
+                  key={index}
+                  sx={{ margin: 0, padding: 0 }}
+                  onClick={() => {
+                    props.changeTab(tab);
+                    localStorage.setItem("tab", tab);
+                  }}
+                  selected={props.tab === tab}
+                >
+                  <ListItem>
+                    <ListItemIcon sx={{ minWidth: 0 }}>
+                      <ListItemAvatar sx={{ minWidth: 0 }}>
+                        <Avatar
+                          sx={{
+                            backgroundColor: { backgroundColor },
+                            borderRadius: 2,
+                            width: 32,
+                            height: 32,
+                          }}
+                        >
+                          {icon}
+                        </Avatar>
+                      </ListItemAvatar>
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={primaryText}
+                      sx={{ marginLeft: 2 }}
+                    />
+                  </ListItem>
+                </ListItemButton>
+              );
+            }
+          )}
+        </List>
+        <Credits />
+      </Stack>
     </Drawer>
   );
 }
