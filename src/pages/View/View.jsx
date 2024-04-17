@@ -69,8 +69,11 @@ function View(props) {
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
+    const escapedSearchKey = searchKey
+      ? searchKey.replace(/['"]/g, (match) => `${match}${match}`)
+      : null;
     const query = searchKey
-      ? `SELECT * FROM person where ${searchAttribute} like '%${searchKey}%' and isDeleted = 'false' ORDER BY fname ASC`
+      ? `SELECT * FROM person where ${searchAttribute} like '%${escapedSearchKey}%' and isDeleted = 'false' ORDER BY fname ASC`
       : "SELECT * FROM person where isDeleted = 'false' ORDER BY fname ASC";
     fetchDetails(db, query).then((details) => {
       setData(details);

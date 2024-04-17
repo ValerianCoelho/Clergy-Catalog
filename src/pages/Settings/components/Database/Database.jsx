@@ -140,7 +140,6 @@ function DatabaseTable() {
         multiple: false,
         directory: true,
       });
-      // console.log(selected, selectedDb);
       const source = `${selectedDb}.db`;
       const destination = `${selected}\\${selectedDb}.db`;
       await copyFile(source, destination, { dir: BaseDirectory.AppConfig });

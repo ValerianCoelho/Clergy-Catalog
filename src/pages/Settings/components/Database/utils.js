@@ -40,7 +40,6 @@ export const convertToCsv = (data, delimiter = ",") => {
     for (let j = 0; j < data[i].donations.length; j++) {
       row += `,"${data[i].donations[j].amount}","${data[i].donations[j].date}","${data[i].donations[j].paymentMode}","${data[i].donations[j].purpose}","${data[i].donations[j].receipt}"`;
     }
-    console.log(row);
     csvData.push(row);
   }
   return csvData.join("\n");

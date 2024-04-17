@@ -32,22 +32,23 @@ function DisplayDeleted() {
     msg: "",
   });
   useEffect(() => {
-    if (reload) {
-      const query = searchKey
-        ? `SELECT * FROM person where ${searchAttribute} like '%${searchKey}%' and isDeleted = 'true' ORDER BY fname ASC`
-        : "SELECT * FROM person where isDeleted = 'true' ORDER BY fname ASC";
-      fetchDetails(db, query).then((details) => {
-        setData(details);
-      });
-      setReload(false);
-    }
+    const escapedSearchKey = searchKey
+      ? searchKey.replace(/['"]/g, (match) => `${match}${match}`)
+      : null;
+    const query = escapedSearchKey
+      ? `SELECT * FROM person WHERE ${searchAttribute} LIKE '%${escapedSearchKey}%' AND isDeleted = 'true' ORDER BY fname ASC`
+      : "SELECT * FROM person WHERE isDeleted = 'true' ORDER BY fname ASC";
+
+    fetchDetails(db, query).then((details) => {
+      setData(details);
+    });
   }, [searchAttribute, searchKey, reload]);
 
   async function handleRestore(sbn) {
     await db.execute(
       `UPDATE person SET isDeleted = 'false' WHERE sbn = ${sbn}`
     );
-    setReload(true);
+    setReload(!reload);
   }
 
   const handleCloseDialog = () => {
@@ -72,7 +73,7 @@ function DisplayDeleted() {
       ...dialogData,
       open: false,
     });
-    setReload(true);
+    setReload(!reload);
   }
 
   return (

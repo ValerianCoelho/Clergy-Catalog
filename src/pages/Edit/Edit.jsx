@@ -272,13 +272,11 @@ function Edit(props) {
     );
     handleCloseDialog();
     props.changeTab("view");
-    console.log("Handle Delete");
   }
 
   const handleReturn = () => {
     handleCloseDialog();
     props.changeTab("view");
-    console.log("Handle Return");
   };
 
   const handleOpenDialog = () => {
