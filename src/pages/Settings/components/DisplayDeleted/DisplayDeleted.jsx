@@ -4,6 +4,7 @@ import db from "../../../../backend/database";
 import DialogBox from "../../../../components/Dialog/Dialog";
 import { reload } from "../Database/utils";
 import { SearchRecords } from "../../../View/View";
+import { fetchDetails } from "../../../View/utils";
 
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -24,50 +25,29 @@ function DisplayDeleted() {
   const [searchKey, setSearchKey] = useState("");
   const [data, setData] = useState([]);
   const [sbn, setSbn] = useState(-1);
-  const [restored, setRestored] = useState(true);
+  const [reload, setReload] = useState(true);
   const [dialogData, setDialogData] = useState({
     open: false,
     title: "",
     msg: "",
   });
-
   useEffect(() => {
-    if (restored) {
-      fetchDetails();
-      setRestored(false);
+    if (reload) {
+      const query = searchKey
+        ? `SELECT * FROM person where ${searchAttribute} like '%${searchKey}%' and isDeleted = 'true' ORDER BY fname ASC`
+        : "SELECT * FROM person where isDeleted = 'true' ORDER BY fname ASC";
+      fetchDetails(db, query).then((details) => {
+        setData(details);
+      });
+      setReload(false);
     }
-  }, [restored]);
-
-  async function fetchDetails() {
-    try {
-      const people = await db.select("SELECT * FROM person");
-
-      // Create an array of promises for fetching donations
-      const donationPromises = people.map((person) =>
-        db.select(`SELECT * FROM donation WHERE sbn=${person.sbn}`)
-      );
-
-      // Wait for all donation promises to resolve
-      const donationsList = await Promise.all(donationPromises);
-
-      // Combine person and donation data
-      const details = people.map((person, index) => ({
-        ...person,
-        donations: donationsList[index],
-      }));
-      // console.log("Hello", details)
-
-      setData(details);
-    } catch (error) {
-      console.error("Error fetching details:", error);
-    }
-  }
+  }, [searchAttribute, searchKey, reload]);
 
   async function handleRestore(sbn) {
     await db.execute(
       `UPDATE person SET isDeleted = 'false' WHERE sbn = ${sbn}`
     );
-    setRestored(true);
+    setReload(true);
   }
 
   const handleCloseDialog = () => {
@@ -86,14 +66,13 @@ function DisplayDeleted() {
   };
 
   async function handleDelete() {
-    console.log("Hello");
     await db.execute(`DELETE FROM person WHERE sbn = ${sbn}`);
     await db.execute(`DELETE FROM donation WHERE sbn = ${sbn}`);
     setDialogData({
       ...dialogData,
       open: false,
     });
-    reload(db);
+    setReload(true);
   }
 
   return (
@@ -126,66 +105,55 @@ function DisplayDeleted() {
           </TableHead>
           <TableBody>
             {data.map((person, index) => {
-              // display only if searchKey is found in searchAttribute and the record is not deleted
-              // searchkey is the value in the search box
-              // searchAttribute is the attribute selected in the dropdown
-              const displayRecord =
-                typeof person[searchAttribute] === "number"
-                  ? person[searchAttribute].toString().includes(searchKey)
-                  : person[searchAttribute].toLowerCase().includes(searchKey) &&
-                    person.isDeleted !== "false";
-              count = displayRecord ? count + 1 : count;
               return (
-                displayRecord && (
-                  <React.Fragment key={index}>
-                    <TableRow
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                        backgroundColor: count % 2 === 1 ? "#f4f4f4" : "white",
-                      }}
-                    >
-                      <TableCell>{person.fname}</TableCell>
-                      <TableCell>{person.lname}</TableCell>
-                      <TableCell>{person.sbn}</TableCell>
-                      <TableCell width={1}>
-                        <Stack
-                          direction={"row"}
-                          spacing={2}
-                          justifyContent={"center"}
+                <React.Fragment key={index}>
+                  <TableRow
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
+                    }}
+                  >
+                    <TableCell>{person.fname}</TableCell>
+                    <TableCell>{person.lname}</TableCell>
+                    <TableCell>{person.sbn}</TableCell>
+                    <TableCell width={1}>
+                      <Stack
+                        direction={"row"}
+                        spacing={2}
+                        justifyContent={"center"}
+                      >
+                        <Button
+                          variant="outlined"
+                          color="success"
+                          disableElevation
+                          startIcon={<RestoreFromTrashIcon />}
+                          onClick={() => handleRestore(person.sbn)}
                         >
-                          <Button
-                            variant="outlined"
-                            color="success"
-                            disableElevation
-                            startIcon={<RestoreFromTrashIcon />}
-                            onClick={() => handleRestore(person.sbn)}
-                          >
-                            Restore
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            color="error"
-                            disableElevation
-                            startIcon={<DeleteForeverIcon />}
-                            onClick={() => {
-                              handleOpenDialog();
-                              setSbn(person.sbn);
-                            }}
-                          >
-                            Delete
-                          </Button>
-                        </Stack>
-                      </TableCell>
-                    </TableRow>
-                  </React.Fragment>
-                )
+                          Restore
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          disableElevation
+                          startIcon={<DeleteForeverIcon />}
+                          onClick={() => {
+                            handleOpenDialog();
+                            setSbn(person.sbn);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
               );
             })}
           </TableBody>
         </Table>
       </TableContainer>
       <DialogBox
-      color={"error"}
+        color={"error"}
         title={dialogData.title}
         msg={dialogData.msg}
         open={dialogData.open}

@@ -93,11 +93,16 @@ function View(props) {
         <Table>
           <TableHead sx={{ backgroundColor: "black" }}>
             <TableRow>
-              {['Expand', 'First Name', 'Last Name', 'SBN'].map((text, index) => (
-                <TableCell key={index} sx={{ color: "white", fontWeight: "bold" }}>
-                  {text}
-                </TableCell>
-              ))}
+              {["Expand", "First Name", "Last Name", "SBN"].map(
+                (text, index) => (
+                  <TableCell
+                    key={index}
+                    sx={{ color: "white", fontWeight: "bold" }}
+                  >
+                    {text}
+                  </TableCell>
+                )
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -180,16 +185,18 @@ function View(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box sx={{ display: "flex", justifyContent: "center", marginY: 2 }}>
-        <Pagination
-          count={totalPages}
-          variant="outlined"
-          shape="rounded"
-          onChange={(e, value) => {
-            setCurrentPage(value);
-          }}
-        />
-      </Box>
+      {data.length > noOfRecords && (
+        <Box sx={{ display: "flex", justifyContent: "center", marginY: 2 }}>
+          <Pagination
+            count={totalPages}
+            variant="outlined"
+            shape="rounded"
+            onChange={(e, value) => {
+              setCurrentPage(value);
+            }}
+          />
+        </Box>
+      )}
     </>
   );
 }

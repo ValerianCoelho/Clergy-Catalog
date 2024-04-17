@@ -125,7 +125,7 @@ function DatabaseTable() {
   };
   const exportCsvDb = async () => {
     const csvDb = activeDb === selectedDb ? db : await Database.load(`sqlite:${selectedDb}.db`);
-    const query = "SELECT * FROM person ORDER BY fname ASC";
+    const query = "SELECT * FROM person where isDeleted = 'false' ORDER BY fname ASC";
     fetchDetails(csvDb, query).then(async (details) => {
       exportToCsv(`${selectedDb}.csv`, convertToCsv(details));
       if(activeDb != selectedDb) {
