@@ -31,11 +31,16 @@ import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
 import { Alert, AlertTitle, Box, Pagination } from "@mui/material";
 
 export function SearchRecords(props) {
+  const searchAttributeMap = {
+    'fname': 'First Name',
+    'lname': 'Last Name',
+    'sbn': 'SBN'
+  }
   return (
     <>
       <Stack direction={"row"} pb={3} spacing={2}>
         <TextField
-          label={"Search " + props.searchAttribute}
+          label={"Search " + searchAttributeMap[props.searchAttribute]}
           variant="outlined"
           type="text"
           fullWidth={true}
