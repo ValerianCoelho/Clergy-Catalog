@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "com.clergy-catalog",
+    "productName": "clergy catalog",
     "version": "0.0.0"
   },
   "tauri": {
@@ -39,7 +39,7 @@
     },
     "bundle": {
       "active": true,
-      "targets": ["nsis", "msi"],
+      "targets": "all",
       "identifier": "com.clergycatalog.dev",
       "icon": [
         "icons/32x32.png",
