@@ -1,6 +1,6 @@
-export async function fetchDetails(db) {
+export async function fetchDetails(db, query) {
   try {
-    const people = await db.select("SELECT * FROM person ORDER BY fname ASC");
+    const people = await db.select(query);
 
     // Create an array of promises for fetching donations
     const donationPromises = people.map((person) =>

@@ -28,6 +28,7 @@ import Button from "@mui/material/Button";
 
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
+import { Box, Pagination } from "@mui/material";
 
 export function SearchRecords(props) {
   return (
@@ -58,19 +59,28 @@ export function SearchRecords(props) {
 
 function View(props) {
   let count = 0;
+  const noOfRecords = 10;
 
   const [open, setOpen] = useState(-1);
   const [searchAttribute, setSearchAttribute] = useState("fname");
   const [searchKey, setSearchKey] = useState("");
   const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
-    fetchDetails(db).then((details) => {
+    const query = searchKey
+      ? `SELECT * FROM person where ${searchAttribute} like '%${searchKey}%' and isDeleted = 'false' ORDER BY fname ASC`
+      : "SELECT * FROM person where isDeleted = 'false' ORDER BY fname ASC";
+    fetchDetails(db, query).then((details) => {
       setData(details);
+      setTotalPages(Math.ceil(details.length / noOfRecords));
     });
+  }, [searchAttribute, searchKey, currentPage]);
+
+  useEffect(() => {
     scrollToTop();
   }, []);
-
   return (
     <>
       <Heading title={"Search Records"} />
@@ -83,38 +93,23 @@ function View(props) {
         <Table>
           <TableHead sx={{ backgroundColor: "black" }}>
             <TableRow>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                Expand
-              </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                First Name
-              </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                Last Name
-              </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                SBN
-              </TableCell>
+              {['Expand', 'First Name', 'Last Name', 'SBN'].map((text, index) => (
+                <TableCell key={index} sx={{ color: "white", fontWeight: "bold" }}>
+                  {text}
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((person, index) => {
-              // display only if searchKey is found in searchAttribute and the record is not deleted
-              // searchkey is the value in the search box
-              // searchAttribute is the attribute selected in the dropdown
-              const displayRecord =
-                typeof person[searchAttribute] === "number"
-                  ? person[searchAttribute].toString().includes(searchKey)
-                  : person[searchAttribute].toLowerCase().includes(searchKey) &&
-                    person.isDeleted === "false";
-              count = displayRecord ? count + 1 : count;
               return (
-                displayRecord && (
+                index >= (currentPage - 1) * noOfRecords &&
+                index < currentPage * noOfRecords && (
                   <React.Fragment key={index}>
                     <TableRow
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
-                        backgroundColor: count % 2 === 1 ? "#f4f4f4" : "white",
+                        backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
                       }}
                     >
                       <TableCell sx={{ padding: 1 }}>
@@ -185,6 +180,16 @@ function View(props) {
           </TableBody>
         </Table>
       </TableContainer>
+      <Box sx={{ display: "flex", justifyContent: "center", marginY: 2 }}>
+        <Pagination
+          count={totalPages}
+          variant="outlined"
+          shape="rounded"
+          onChange={(e, value) => {
+            setCurrentPage(value);
+          }}
+        />
+      </Box>
     </>
   );
 }
