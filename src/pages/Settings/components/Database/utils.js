@@ -36,9 +36,9 @@ export const convertToCsv = (data, delimiter = ",") => {
     ],
   ];
   for (let i = 0; i < data.length; i++) {
-    let row = `"${data[i].fname}","${data[i].lname}","${data[i].sbn}","${data[i].beneficiary1}","${data[i].beneficiary2}","${data[i].contact1}","${data[i].contact2}","${data[i].contact3}","${data[i].email}","${data[i].pan}","${data[i].address}"`;
+    let row = `"${data[i].fname.replace(/["]/g, match => `${match}${match}`)}","${data[i].lname.replace(/["]/g, match => `${match}${match}`)}","${data[i].sbn}", "${data[i].beneficiary1.replace(/["]/g, match => `${match}${match}`)}","${data[i].beneficiary2.replace(/["]/g, match => `${match}${match}`)}","${data[i].contact1}","${data[i].contact2}","${data[i].contact3}","${data[i].email}","${data[i].pan}","${data[i].address.replace(/["]/g, match => `${match}${match}`)}"`;
     for (let j = 0; j < data[i].donations.length; j++) {
-      row += `,"${data[i].donations[j].amount}","${data[i].donations[j].date}","${data[i].donations[j].paymentMode}","${data[i].donations[j].purpose}","${data[i].donations[j].receipt}"`;
+      row += `,"${data[i].donations[j].amount}","${data[i].donations[j].date}","${data[i].donations[j].paymentMode.replace(/["]/g, match => `${match}${match}`)}","${data[i].donations[j].purpose.replace(/["]/g, match => `${match}${match}`)}","${data[i].donations[j].receipt}"`;
     }
     csvData.push(row);
   }
