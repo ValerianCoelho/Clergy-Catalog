@@ -18,6 +18,7 @@ import TableContainer from "@mui/material/TableContainer";
 
 import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { Alert, AlertTitle } from "@mui/material";
 
 function DisplayDeleted() {
   let count = 0;
@@ -83,76 +84,84 @@ function DisplayDeleted() {
         setSearchKey={setSearchKey}
         searchAttribute={searchAttribute}
       />
-      <TableContainer component={Paper} sx={{ marginBottom: 4 }}>
-        <Table>
-          <TableHead sx={{ backgroundColor: "black" }}>
-            <TableRow>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                First Name
-              </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                Last Name
-              </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                SBN
-              </TableCell>
-              <TableCell
-                sx={{ color: "white", fontWeight: "bold" }}
-                align="center"
-              >
-                Action
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((person, index) => {
-              return (
-                <React.Fragment key={index}>
-                  <TableRow
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                      backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
-                    }}
-                  >
-                    <TableCell>{person.fname}</TableCell>
-                    <TableCell>{person.lname}</TableCell>
-                    <TableCell>{person.sbn}</TableCell>
-                    <TableCell width={1}>
-                      <Stack
-                        direction={"row"}
-                        spacing={2}
-                        justifyContent={"center"}
-                      >
-                        <Button
-                          variant="outlined"
-                          color="success"
-                          disableElevation
-                          startIcon={<RestoreFromTrashIcon />}
-                          onClick={() => handleRestore(person.sbn)}
+      {data.length > 0 && (
+        <TableContainer component={Paper} sx={{ marginBottom: 4 }}>
+          <Table>
+            <TableHead sx={{ backgroundColor: "black" }}>
+              <TableRow>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                  First Name
+                </TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                  Last Name
+                </TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                  SBN
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: "bold" }}
+                  align="center"
+                >
+                  Action
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map((person, index) => {
+                return (
+                  <React.Fragment key={index}>
+                    <TableRow
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
+                      }}
+                    >
+                      <TableCell>{person.fname}</TableCell>
+                      <TableCell>{person.lname}</TableCell>
+                      <TableCell>{person.sbn}</TableCell>
+                      <TableCell width={1}>
+                        <Stack
+                          direction={"row"}
+                          spacing={2}
+                          justifyContent={"center"}
                         >
-                          Restore
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          color="error"
-                          disableElevation
-                          startIcon={<DeleteForeverIcon />}
-                          onClick={() => {
-                            handleOpenDialog();
-                            setSbn(person.sbn);
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                          <Button
+                            variant="outlined"
+                            color="success"
+                            disableElevation
+                            startIcon={<RestoreFromTrashIcon />}
+                            onClick={() => handleRestore(person.sbn)}
+                          >
+                            Restore
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            disableElevation
+                            startIcon={<DeleteForeverIcon />}
+                            onClick={() => {
+                              handleOpenDialog();
+                              setSbn(person.sbn);
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  </React.Fragment>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+      {data.length === 0 && (
+        <Alert severity="warning">
+          <AlertTitle>No Records Found</AlertTitle>
+          This could be because the search key does not match any records, or there are no deleted records.
+        </Alert>
+      )}
       <DialogBox
         color={"error"}
         title={dialogData.title}
