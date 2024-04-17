@@ -28,7 +28,7 @@ import Button from "@mui/material/Button";
 
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
-import { Box, Pagination } from "@mui/material";
+import { Alert, AlertTitle, Box, Pagination } from "@mui/material";
 
 export function SearchRecords(props) {
   return (
@@ -92,102 +92,105 @@ function View(props) {
         setSearchKey={setSearchKey}
         searchAttribute={searchAttribute}
       />
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead sx={{ backgroundColor: "black" }}>
-            <TableRow>
-              {["Expand", "First Name", "Last Name", "SBN"].map(
-                (text, index) => (
-                  <TableCell
-                    key={index}
-                    sx={{ color: "white", fontWeight: "bold" }}
-                  >
-                    {text}
-                  </TableCell>
-                )
-              )}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((person, index) => {
-              return (
-                index >= (currentPage - 1) * noOfRecords &&
-                index < currentPage * noOfRecords && (
-                  <React.Fragment key={index}>
-                    <TableRow
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                        backgroundColor: index % 2 === 1 ? "#f4f4f4" : "white",
-                      }}
+      {data.length > 0 && (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead sx={{ backgroundColor: "black" }}>
+              <TableRow>
+                {["Expand", "First Name", "Last Name", "SBN"].map(
+                  (text, index) => (
+                    <TableCell
+                      key={index}
+                      sx={{ color: "white", fontWeight: "bold" }}
                     >
-                      <TableCell sx={{ padding: 1 }}>
-                        <IconButton
-                          onClick={() => {
-                            setOpen(open === index ? -1 : index);
-                          }}
-                        >
-                          {open == index ? (
-                            <KeyboardArrowUp />
-                          ) : (
-                            <KeyboardArrowDown />
-                          )}
-                        </IconButton>
-                      </TableCell>
-                      <TableCell>{person.fname}</TableCell>
-                      <TableCell>{person.lname}</TableCell>
-                      <TableCell>{person.sbn}</TableCell>
-                    </TableRow>
-                    <TableRow
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                        border: open === index ? "2px solid #4d4d4d52" : "",
-                      }}
-                    >
-                      <TableCell
-                        colSpan={4}
-                        sx={{ paddingTop: 0, paddingBottom: 0 }}
+                      {text}
+                    </TableCell>
+                  )
+                )}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map((person, index) => {
+                return (
+                  index >= (currentPage - 1) * noOfRecords &&
+                  index < currentPage * noOfRecords && (
+                    <React.Fragment key={index}>
+                      <TableRow
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                          backgroundColor:
+                            index % 2 === 1 ? "#f4f4f4" : "white",
+                        }}
                       >
-                        <Collapse
-                          in={open == index}
-                          timeout="auto"
-                          unmountOnExit
-                        >
-                          <Typography
-                            variant="h5"
-                            sx={{ marginTop: 3, marginBottom: 2 }}
-                          >
-                            Donation Details
-                          </Typography>
-                          <DisplayDonations donations={person.donations} />
-                          <Typography
-                            variant="h5"
-                            sx={{ marginTop: 4, marginBottom: 2 }}
-                          >
-                            Additional Details
-                          </Typography>
-                          <DisplayAdditionalDetails person={person} />
-                          <Button
-                            variant="contained"
-                            fullWidth={true}
-                            sx={{ marginBottom: 2 }}
-                            disableElevation
+                        <TableCell sx={{ padding: 1 }}>
+                          <IconButton
                             onClick={() => {
-                              props.setSbn(person.sbn);
-                              props.changeTab("edit");
+                              setOpen(open === index ? -1 : index);
                             }}
                           >
-                            Edit Record
-                          </Button>
-                        </Collapse>
-                      </TableCell>
-                    </TableRow>
-                  </React.Fragment>
-                )
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                            {open == index ? (
+                              <KeyboardArrowUp />
+                            ) : (
+                              <KeyboardArrowDown />
+                            )}
+                          </IconButton>
+                        </TableCell>
+                        <TableCell>{person.fname}</TableCell>
+                        <TableCell>{person.lname}</TableCell>
+                        <TableCell>{person.sbn}</TableCell>
+                      </TableRow>
+                      <TableRow
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                          border: open === index ? "2px solid #4d4d4d52" : "",
+                        }}
+                      >
+                        <TableCell
+                          colSpan={4}
+                          sx={{ paddingTop: 0, paddingBottom: 0 }}
+                        >
+                          <Collapse
+                            in={open == index}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            <Typography
+                              variant="h5"
+                              sx={{ marginTop: 3, marginBottom: 2 }}
+                            >
+                              Donation Details
+                            </Typography>
+                            <DisplayDonations donations={person.donations} />
+                            <Typography
+                              variant="h5"
+                              sx={{ marginTop: 4, marginBottom: 2 }}
+                            >
+                              Additional Details
+                            </Typography>
+                            <DisplayAdditionalDetails person={person} />
+                            <Button
+                              variant="contained"
+                              fullWidth={true}
+                              sx={{ marginBottom: 2 }}
+                              disableElevation
+                              onClick={() => {
+                                props.setSbn(person.sbn);
+                                props.changeTab("edit");
+                              }}
+                            >
+                              Edit Record
+                            </Button>
+                          </Collapse>
+                        </TableCell>
+                      </TableRow>
+                    </React.Fragment>
+                  )
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
       {data.length > noOfRecords && (
         <Box sx={{ display: "flex", justifyContent: "center", marginY: 2 }}>
           <Pagination
@@ -199,6 +202,12 @@ function View(props) {
             }}
           />
         </Box>
+      )}
+      {data.length === 0 && (
+        <Alert severity="warning">
+          <AlertTitle>No Records Found</AlertTitle>
+          This could be because the search key does not match any records or the database is empty.
+        </Alert>
       )}
     </>
   );
