@@ -58,7 +58,6 @@ export function SearchRecords(props) {
 }
 
 function View(props) {
-  let count = 0;
   const noOfRecords = 10;
 
   const [open, setOpen] = useState(-1);
@@ -79,7 +78,12 @@ function View(props) {
       setData(details);
       setTotalPages(Math.ceil(details.length / noOfRecords));
     });
+    console.log(data)
   }, [searchAttribute, searchKey, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchAttribute, searchKey]);
 
   useEffect(() => {
     scrollToTop();
