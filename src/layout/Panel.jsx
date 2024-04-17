@@ -94,7 +94,7 @@ function Panel(props) {
             }
           )}
         </List>
-        <Credits />
+        {/* <Credits /> */}
       </Stack>
     </Drawer>
   );
