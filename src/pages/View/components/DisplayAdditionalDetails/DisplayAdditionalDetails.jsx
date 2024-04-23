@@ -80,7 +80,7 @@ function DisplayAdditionalDetails({ person }) {
             <React.Fragment key={index}>
               {value && (
                 <Grid xs={12} sm={12} md={6} lg={6} xl={6} item>
-                  <ListItem sx={{ border: "1px solid #e1e1e1" }}>
+                  <ListItem sx={{ border: "1px solid #e1e1e1", height: '100%'}}>
                     <ListItemAvatar>
                       <Avatar sx={{ backgroundColor: backgroundColor }}>
                         {icon}
