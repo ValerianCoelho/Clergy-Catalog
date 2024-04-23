@@ -6,8 +6,8 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "com.clergy-catalog",
-    "version": "0.0.0"
+    "productName": "clergy catalog",
+    "version": "1.0.0"
   },
   "tauri": {
     "allowlist": {
