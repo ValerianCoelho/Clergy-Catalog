@@ -76,6 +76,7 @@ function DatabaseTable() {
   };
   const handleCloseRenameDialog = () => {
     setOpenRenameDialog(false);
+    handleCloseMenu();
     setNewDbName("");
   };
 
@@ -180,9 +181,7 @@ function DatabaseTable() {
     reload(db);
   };
 
-  
   const renameDatabase = async () => {
-    console.log(newDbName)
     try {
       // rename the db file
       await copyFile(`${selectedDb}.db`, `${newDbName}.db`, {
@@ -195,7 +194,7 @@ function DatabaseTable() {
         });
         await db.close();
       }
-      
+
       // remove the old db file
       await removeFile(`${selectedDb}.db`, { dir: BaseDirectory.AppConfig });
       await removeFile(`${selectedDb}.db-shm`, {
@@ -215,7 +214,7 @@ function DatabaseTable() {
     { option: "Export (CSV)", action: exportCsvDb },
     { option: "Export DB File", action: exportDbFile },
     { option: "Delete Database", action: deleteDatabase },
-    { option: "Rename Database", action: () => setOpenRenameDialog(true)},
+    { option: "Rename Database", action: () => setOpenRenameDialog(true) },
   ];
 
   return (
@@ -321,14 +320,14 @@ function DatabaseTable() {
       </Dialog>
       <Dialog open={openRenameDialog} onClose={handleCloseRenameDialog}>
         <Stack p={3} spacing={2} width={300}>
-          <Typography variant="h6">Rename Database</Typography>
+          <Typography variant="h6">Rename Database: {selectedDb}</Typography>
           <TextField
             type={"text"}
             label={"New Database Name"}
             size="medium"
             onChange={(e) => {
               setNewDbName(e.target.value);
-              console.log(newDbName)
+              console.log(newDbName);
             }}
           />
           <Stack direction={"row"} spacing={1}>
