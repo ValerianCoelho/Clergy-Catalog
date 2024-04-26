@@ -193,8 +193,9 @@ function DatabaseTable() {
         await writeTextFile("active.txt", newDbName, {
           dir: BaseDirectory.AppConfig,
         });
+        await db.close();
       }
-
+      
       // remove the old db file
       await removeFile(`${selectedDb}.db`, { dir: BaseDirectory.AppConfig });
       await removeFile(`${selectedDb}.db-shm`, {
