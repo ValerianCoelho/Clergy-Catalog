@@ -40,6 +40,9 @@ function DatabaseTable() {
   const [openDialog, setOpenDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
+  const [newDbName, setNewDbName] = React.useState("");
+  const [openRenameDialog, setOpenRenameDialog] = useState(false);
+
   const openMenu = Boolean(anchorEl);
 
   const [dbName, setDbName] = React.useState("");
@@ -70,6 +73,10 @@ function DatabaseTable() {
   };
   const handleCloseMenu = () => {
     setAnchorEl(null);
+  };
+  const handleCloseRenameDialog = () => {
+    setOpenRenameDialog(false);
+    setNewDbName("");
   };
 
   React.useEffect(() => {
@@ -124,11 +131,15 @@ function DatabaseTable() {
     reload(db);
   };
   const exportCsvDb = async () => {
-    const csvDb = activeDb === selectedDb ? db : await Database.load(`sqlite:${selectedDb}.db`);
-    const query = "SELECT * FROM person where isDeleted = 'false' ORDER BY fname ASC";
+    const csvDb =
+      activeDb === selectedDb
+        ? db
+        : await Database.load(`sqlite:${selectedDb}.db`);
+    const query =
+      "SELECT * FROM person where isDeleted = 'false' ORDER BY fname ASC";
     fetchDetails(csvDb, query).then(async (details) => {
       exportToCsv(`${selectedDb}.csv`, convertToCsv(details));
-      if(activeDb != selectedDb) {
+      if (activeDb != selectedDb) {
         await csvDb.close();
       }
     });
@@ -149,7 +160,7 @@ function DatabaseTable() {
     handleCloseMenu();
   };
   const deleteDatabase = async () => {
-    if(activeDb === selectedDb) {
+    if (activeDb === selectedDb) {
       setOpenDeleteDialog(true);
       handleCloseMenu();
       return;
@@ -169,11 +180,41 @@ function DatabaseTable() {
     reload(db);
   };
 
+  
+  const renameDatabase = async () => {
+    console.log(newDbName)
+    try {
+      // rename the db file
+      await copyFile(`${selectedDb}.db`, `${newDbName}.db`, {
+        dir: BaseDirectory.AppConfig,
+      });
+
+      if (activeDb === selectedDb) {
+        await writeTextFile("active.txt", newDbName, {
+          dir: BaseDirectory.AppConfig,
+        });
+      }
+
+      // remove the old db file
+      await removeFile(`${selectedDb}.db`, { dir: BaseDirectory.AppConfig });
+      await removeFile(`${selectedDb}.db-shm`, {
+        dir: BaseDirectory.AppConfig,
+      });
+      await removeFile(`${selectedDb}.db-wal`, {
+        dir: BaseDirectory.AppConfig,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    reload(db);
+  };
+
   const options = [
     { option: "Set Active", action: setAsActive },
     { option: "Export (CSV)", action: exportCsvDb },
     { option: "Export DB File", action: exportDbFile },
     { option: "Delete Database", action: deleteDatabase },
+    { option: "Rename Database", action: () => setOpenRenameDialog(true)},
   ];
 
   return (
@@ -277,13 +318,56 @@ function DatabaseTable() {
           </Stack>
         </Stack>
       </Dialog>
-      <Dialog open={openDeleteDialog} onClose={()=>{setOpenDeleteDialog(false)}}>
+      <Dialog open={openRenameDialog} onClose={handleCloseRenameDialog}>
+        <Stack p={3} spacing={2} width={300}>
+          <Typography variant="h6">Rename Database</Typography>
+          <TextField
+            type={"text"}
+            label={"New Database Name"}
+            size="medium"
+            onChange={(e) => {
+              setNewDbName(e.target.value);
+              console.log(newDbName)
+            }}
+          />
+          <Stack direction={"row"} spacing={1}>
+            <Button
+              onClick={handleCloseRenameDialog}
+              variant="contained"
+              autoFocus
+              disableElevation
+              fullWidth={true}
+              size="medium"
+            >
+              Close
+            </Button>
+            <Button
+              onClick={renameDatabase}
+              variant="contained"
+              autoFocus
+              disableElevation
+              fullWidth={true}
+              size="medium"
+            >
+              Rename
+            </Button>
+          </Stack>
+        </Stack>
+      </Dialog>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => {
+          setOpenDeleteDialog(false);
+        }}
+      >
         <Stack p={3} spacing={2} width={300}>
           <Typography variant="h6">
-          Active databases cannot be deleted
+            Active databases cannot be deleted
           </Typography>
           <Button
-            onClick={()=>{setOpenDeleteDialog(false)}}
+            onClick={() => {
+              setOpenDeleteDialog(false);
+            }}
             variant="contained"
             autoFocus
             disableElevation
